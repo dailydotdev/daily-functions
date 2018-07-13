@@ -1,0 +1,26 @@
+{
+  "name": "daily-crawler",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "deploy": "gcloud --project devkit-prod beta functions deploy crawler --trigger-resource post-fetched --trigger-event google.pubsub.topic.publish",
+    "postinstall": "babel ./node_modules/@metascraper -d ./node_modules/@metascraper"
+  },
+  "engines": {
+    "node": "~6.14.0"
+  },
+  "dependencies": {
+    "@google-cloud/pubsub": "^0.19.0",
+    "cheerio": "^1.0.0-rc.2",
+    "metascraper-date": "^3.11.4",
+    "metascraper-title": "^3.11.8",
+    "metascraper-url": "^3.11.8",
+    "request": "^2.87.0",
+    "request-promise-native": "^1.0.5"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0"
+  }
+}
