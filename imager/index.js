@@ -81,11 +81,12 @@ const manipulateImage = (id, url) => {
         console.log(`[${id}] processing image`);
 
         const ratio = info.width / info.height;
-        const placeholderSize = Math.max(10, 3 * ratio);
+        const placeholderSize = Math.max(10, Math.floor(3 * ratio));
         const { format, image: resized } = resizeImage(image, info);
 
-        const resizedBufferPromise = resized.toBuffer()
-          .then(buffer => uploadImage(id, buffer, format));
+        const isGif = info.format === 'gif';
+        const resizedBufferPromise = (isGif ? Promise.resolve(buffer) : resized.toBuffer())
+          .then(buffer => uploadImage(id, buffer, isGif ? 'gif' : format));
 
         const placeholderBufferPromise = resized.resize(placeholderSize).toBuffer()
           .then(buffer => `data:image/${format};base64,${buffer.toString('base64')}`);
@@ -118,3 +119,7 @@ exports.imager = (event) => {
         })
     );
 };
+
+manipulateImage('', 'https://www.nodejsera.com/library/assets/img/30-days.png')
+  .then(console.log)
+  .catch(console.error);
