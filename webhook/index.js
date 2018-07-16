@@ -2,7 +2,7 @@ const crypto = require('crypto');
 const PubSub = require(`@google-cloud/pubsub`);
 const pubsub = new PubSub();
 
-const convertTime = (epoch) => (epoch ? new Date(epoch) : null);
+const convertTime = (epoch) => (epoch ? new Date(epoch * 1000) : null);
 
 const createOrGetTopic = () => {
   const topicName = 'post-fetched';
