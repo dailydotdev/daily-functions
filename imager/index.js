@@ -120,6 +120,6 @@ exports.imager = (event) => {
     );
 };
 
-manipulateImage('', 'https://www.nodejsera.com/library/assets/img/30-days.png')
-  .then(console.log)
-  .catch(console.error);
+// manipulateImage('', 'https://www.nodejsera.com/library/assets/img/30-days.png')
+//   .then(console.log)
+//   .catch(console.error);
