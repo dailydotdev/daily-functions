@@ -80,3 +80,7 @@ exports.crawler = (event) => {
         })
     );
 };
+
+extractMetaTags('https://medium.com/@atulanand94/creating-a-self-updating-portfolio-3a2e23d4f836')
+  .then(convertTagsToSchema)
+  .then(console.log);

@@ -17,6 +17,16 @@ const wrapUrl = rule => ({ htmlDom, url }) => {
   return validatorUrl(value, url);
 };
 
+const validatorTwitterHandle = value => {
+  if (!value || value[0] !== '@') return false;
+  return value;
+};
+
+const wrapTwitterHandle = rule => ({ htmlDom }) => {
+  const value = rule(htmlDom);
+  return validatorTwitterHandle(value);
+};
+
 module.exports = () => {
   return ({
     modified: [
@@ -29,6 +39,12 @@ module.exports = () => {
       wrapUrl($ => $('meta[name="twitter:image:src"]').attr('content')),
       wrapUrl($ => $('meta[name="twitter:image"]').attr('content')),
       wrapUrl($ => $('meta[itemprop="image"]').attr('content')),
-    ]
+    ],
+    siteTwitter: [
+      wrapTwitterHandle($ => $('meta[name="twitter:site"]').attr('content')),
+    ],
+    creatorTwitter: [
+      wrapTwitterHandle($ => $('meta[name="twitter:creator"]').attr('content')),
+    ],
   });
 };
