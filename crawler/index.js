@@ -56,6 +56,10 @@ const convertTagsToSchema = (tags) => {
     obj.updatedAt = new Date(obj.modified);
     delete obj.modified;
   }
+  if (obj.keywords) {
+    obj.tags = obj.keywords;
+    delete obj.keywords;
+  }
   return obj;
 };
 
@@ -67,7 +71,7 @@ exports.crawler = (event) => {
 
   return extractMetaTags(data.url)
     .then(convertTagsToSchema)
-    .then(tags => Object.assign({}, data, tags, data.title ? { title: data.title } : {}))
+    .then(tags => Object.assign({}, data, tags, data.title ? { title: data.title } : {}, data.tags ? { tags: data.tags } : {}))
     .catch((err) => {
       console.error(`[${data.id}] failed to scrape ${data.url}`, err);
       return data;
@@ -81,6 +85,6 @@ exports.crawler = (event) => {
     );
 };
 
-extractMetaTags('https://medium.com/@atulanand94/creating-a-self-updating-portfolio-3a2e23d4f836')
-  .then(convertTagsToSchema)
-  .then(console.log);
+// extractMetaTags('https://www.codementor.io/caseymorris/functional-js-with-es6-recursive-patterns-m2pv4j98d')
+//   .then(convertTagsToSchema)
+//   .then(console.log);

@@ -27,6 +27,16 @@ const wrapTwitterHandle = rule => ({ htmlDom }) => {
   return validatorTwitterHandle(value);
 };
 
+const validatorKeywordsHandle = value => {
+  if (!value || value.indexOf(',') < 0) return false;
+  return value.toLowerCase().split(',').map(s => s.trim().replace(/ /g, '-'));
+};
+
+const wrapKeywordsHandle = rule => ({ htmlDom }) => {
+  const value = rule(htmlDom);
+  return validatorKeywordsHandle(value);
+};
+
 module.exports = () => {
   return ({
     modified: [
@@ -45,6 +55,9 @@ module.exports = () => {
     ],
     creatorTwitter: [
       wrapTwitterHandle($ => $('meta[name="twitter:creator"]').attr('content')),
+    ],
+    keywords: [
+      wrapKeywordsHandle($ => $('meta[name="keywords"]').attr('content')),
     ],
   });
 };
