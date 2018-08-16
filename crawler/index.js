@@ -1,14 +1,12 @@
-const cheerio = require('cheerio');
-const request = require('request-promise-native');
-const PubSub = require(`@google-cloud/pubsub`);
-const pubsub = new PubSub();
-
-const rules = [
+const got = require('got');
+const metascraper = require('metascraper').load([
   require('metascraper-date')(),
   require('metascraper-title')(),
   require('metascraper-url')(),
   require('./rules')(),
-];
+]);
+const PubSub = require(`@google-cloud/pubsub`);
+const pubsub = new PubSub();
 
 const createOrGetTopic = () => {
   const topicName = 'crawled-post';
@@ -28,38 +26,23 @@ const createOrGetTopic = () => {
 };
 
 const extractMetaTags = (url) =>
-  request(url)
-    .then((html) => {
-      const htmlDom = cheerio.load(html);
-      return rules.reduce((acc, rule) => {
-        const newRes = Object.keys(rule).reduce((acc2, key) => {
-          for (let i = 0; i < rule[key].length; i++) {
-            const res = rule[key][i]({ htmlDom, url });
-            if (res) {
-              return Object.assign({}, acc2, { [key]: res });
-            }
-          }
-
-          return acc2;
-        }, {});
-        return Object.assign({}, acc, newRes);
-      }, {});
-    });
+  got(url)
+    .then(({ body: html, url }) => metascraper({ html, url }));
 
 const convertTagsToSchema = (tags) => {
   const obj = Object.assign({}, tags);
   if (obj.date) {
     obj.publishedAt = new Date(obj.date);
-    delete obj.date;
   }
+  delete obj.date;
   if (obj.modified) {
     obj.updatedAt = new Date(obj.modified);
-    delete obj.modified;
   }
+  delete obj.modified;
   if (obj.keywords) {
     obj.tags = obj.keywords;
-    delete obj.keywords;
   }
+  delete obj.keywords;
   return obj;
 };
 

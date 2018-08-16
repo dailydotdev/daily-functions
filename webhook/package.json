@@ -3,10 +3,10 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "deploy": "gcloud --project devkit-prod beta functions deploy webhook --trigger-http --env-vars-file .env.yaml"
+    "deploy": "gcloud --project devkit-prod beta functions deploy webhook --runtime nodejs8 --trigger-http --env-vars-file .env.yaml"
   },
   "engines": {
-    "node": "~6.14.0"
+    "node": "~8.11.0"
   },
   "devDependencies": {
     "request": "^2.87.0"

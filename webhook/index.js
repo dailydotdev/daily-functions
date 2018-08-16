@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const PubSub = require(`@google-cloud/pubsub`);
 const pubsub = new PubSub();
+const url = require('url');
 
 const convertTime = (epoch) => (epoch ? new Date(epoch * 1000) : null);
 
@@ -23,6 +24,14 @@ const createOrGetTopic = () => {
 
 exports.webhook = (req, res) => {
   const pubId = req.url.substring(1);
+
+  // if (req.method.toLowerCase() === 'get') {
+  //   const parsedUrl = url.parse(req.url, true);
+  //   if (parsedUrl.query['hub.challenge']) {
+  //     console.log(`received challenge ${parsedUrl.query['hub.challenge']} for ${parsedUrl.query['hub.topic']}`);
+  //     return res.status(200).send(parsedUrl.query['hub.challenge']);
+  //   }
+  // }
 
   if (req.method.toLowerCase() !== 'post' || !pubId.length) {
     return res.status(404).send();
