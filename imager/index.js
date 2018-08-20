@@ -102,7 +102,7 @@ const manipulateImage = (id, url) => {
 };
 
 exports.imager = (event) => {
-  const pubsubMessage = event.data;
+  const pubsubMessage = event;
   const data = JSON.parse(Buffer.from(pubsubMessage.data, 'base64').toString());
 
   return manipulateImage(data.id, data.image)

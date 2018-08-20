@@ -47,7 +47,7 @@ const convertTagsToSchema = (tags) => {
 };
 
 exports.crawler = (event) => {
-  const pubsubMessage = event.data;
+  const pubsubMessage = event;
   const data = JSON.parse(Buffer.from(pubsubMessage.data, 'base64').toString());
 
   console.log(`[${data.id}] scraping ${data.url} to enrich`, data);
