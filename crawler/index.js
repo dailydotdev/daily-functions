@@ -56,18 +56,28 @@ exports.crawler = (event) => {
     .then(convertTagsToSchema)
     .then(tags => Object.assign({}, data, tags, data.title ? { title: data.title } : {}, data.tags ? { tags: data.tags } : {}))
     .catch((err) => {
-      console.error(`[${data.id}] failed to scrape ${data.url}`, err);
+      if (err.statusCode === 404) {
+        console.info(`[${data.id}] post doesn't exist anymore ${data.url}`);
+        return null;
+      }
+
+      console.warn(`[${data.id}] failed to scrape ${data.url}`, err);
       return data;
     })
-    .then((item) =>
-      createOrGetTopic()
+    .then((item) => {
+      if (!item) {
+        return Promise.resolve();
+      }
+
+      return createOrGetTopic()
         .then((topic) => {
           console.log(`[${data.id}] crawled post`, item);
           return topic.publisher().publish(Buffer.from(JSON.stringify(item)));
-        })
-    );
+        });
+    });
 };
 
-// extractMetaTags('https://www.codementor.io/caseymorris/functional-js-with-es6-recursive-patterns-m2pv4j98d')
+// extractMetaTags('https://blogs.msdn.microsoft.com/devops/2018/09/13/search-msrc-fix-for-tfs-2017-update-3/')
 //   .then(convertTagsToSchema)
-//   .then(console.log);
+//   .then(console.log)
+//   .catch(err => console.error(err.statusCode));
