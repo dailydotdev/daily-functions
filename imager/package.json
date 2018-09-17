@@ -3,14 +3,14 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "deploy": "gcloud --project devkit-prod beta functions deploy imager --runtime nodejs8 --trigger-resource crawled-post --trigger-event google.pubsub.topic.publish --set-env-vars BUCKET=devkit-assets"
+    "deploy": "gcloud --project devkit-prod beta functions deploy imager --runtime nodejs8 --trigger-resource crawled-post --trigger-event google.pubsub.topic.publish --env-vars-file .env.yaml"
   },
   "engines": {
     "node": "~8.11.0"
   },
   "dependencies": {
     "@google-cloud/pubsub": "^0.19.0",
-    "@google-cloud/storage": "^1.7.0",
+    "cloudinary": "^1.11.0",
     "request": "^2.87.0",
     "request-promise-native": "^1.0.5",
     "sharp": "^0.20.5"

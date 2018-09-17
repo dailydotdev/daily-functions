@@ -2,10 +2,9 @@ const crypto = require('crypto');
 const request = require('request-promise-native');
 const sharp = require('sharp');
 const PubSub = require(`@google-cloud/pubsub`);
-const Storage = require('@google-cloud/storage');
+const cloudinary = require('cloudinary');
 
 const pubsub = new PubSub();
-const storage = new Storage();
 
 const createOrGetTopic = () => {
   const topicName = 'post-image-processed';
@@ -31,34 +30,20 @@ const checksum = (str, algorithm = 'md5', encoding = 'hex') => {
     .digest(encoding);
 };
 
-const resizeImage = (image, info) => {
-  const resize = image.resize(Math.min(1024, info.width));
-  if (info.channels === 4) {
-    return { format: 'png', image: resize.png() };
-  }
-
-  return { format: 'jpeg', image: resize.jpeg() };
-};
-
-const uploadImage = (id, buffer, format) => {
-  const bucketName = process.env.BUCKET;
-  const bucket = storage.bucket(bucketName);
-  const fileName = `images/${checksum(buffer)}.${format}`;
-  const file = bucket.file(fileName);
+const uploadImage = (id, buffer, isGif) => {
+  const fileName = checksum(buffer);
+  const uploadPreset = isGif ? 'post_animated' : 'post_image';
 
   console.log(`[${id}] uploading image ${fileName}`);
 
   return new Promise((resolve, reject) => {
-    file.createWriteStream({
-      gzip: true,
-      metadata: {
-        cacheControl: 'public, max-age=31536000',
-        contentType: `image/${format}`,
-      },
-      predefinedAcl: 'publicRead',
+    cloudinary.v2.uploader.upload_stream({ public_id: fileName, upload_preset: uploadPreset }, (err, res) => {
+      if (err) {
+        return reject(err);
+      }
+
+      resolve(cloudinary.v2.url(res.public_id, { secure: true, fetch_format: 'auto' }));
     })
-      .on('error', reject)
-      .on('finish', () => resolve(`https://storage.googleapis.com/${bucketName}/${fileName}`))
       .end(buffer);
   });
 };
@@ -82,16 +67,14 @@ const manipulateImage = (id, url) => {
 
         const ratio = info.width / info.height;
         const placeholderSize = Math.max(10, Math.floor(3 * ratio));
-        const { format, image: resized } = resizeImage(image, info);
 
         const isGif = info.format === 'gif';
-        const resizedBufferPromise = (isGif ? Promise.resolve(buffer) : resized.toBuffer())
-          .then(buffer => uploadImage(id, buffer, isGif ? 'gif' : format));
+        const uploadPromise = uploadImage(id, buffer, isGif);
 
-        const placeholderBufferPromise = resized.resize(placeholderSize).toBuffer()
-          .then(buffer => `data:image/${format};base64,${buffer.toString('base64')}`);
+        const placeholderPromise = image.jpeg().resize(placeholderSize).toBuffer()
+          .then(buffer => `data:image/jpeg;base64,${buffer.toString('base64')}`);
 
-        return Promise.all([resizedBufferPromise, placeholderBufferPromise])
+        return Promise.all([uploadPromise, placeholderPromise])
           .then(res => ({
             image: res[0],
             placeholder: res[1],
@@ -120,6 +103,6 @@ exports.imager = (event) => {
     );
 };
 
-// manipulateImage('', 'https://www.nodejsera.com/library/assets/img/30-days.png')
+// manipulateImage('', true ? 'https://cdn-images-1.medium.com/max/1600/1*GOx1lfu0QsRJEwd9HzmrYg.gif' : 'https://www.nodejsera.com/library/assets/img/30-days.png')
 //   .then(console.log)
 //   .catch(console.error);
