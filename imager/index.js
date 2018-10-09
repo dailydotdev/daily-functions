@@ -42,7 +42,7 @@ const uploadImage = (id, buffer, isGif) => {
         return reject(err);
       }
 
-      resolve(cloudinary.v2.url(res.public_id, { secure: true, fetch_format: 'auto' }));
+      resolve(cloudinary.v2.url(res.public_id, { secure: true, fetch_format: 'auto', quality: 'auto' }));
     })
       .end(buffer);
   });
