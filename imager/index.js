@@ -6,8 +6,8 @@ const cloudinary = require('cloudinary');
 
 const pubsub = new PubSub();
 
-const createOrGetTopic = () => {
-  const topicName = 'post-image-processed';
+const createOrGetTopic = (type) => {
+  const topicName = `${type}-image-processed`;
   return pubsub.createTopic(topicName)
     .then((results) => {
       const topic = results[0];
@@ -30,9 +30,9 @@ const checksum = (str, algorithm = 'md5', encoding = 'hex') => {
     .digest(encoding);
 };
 
-const uploadImage = (id, buffer, isGif) => {
+const uploadImage = (id, buffer, isGif, type) => {
   const fileName = checksum(buffer);
-  const uploadPreset = isGif ? 'post_animated' : 'post_image';
+  const uploadPreset = isGif ? `${type}_animated` : `${type}_image`;
 
   console.log(`[${id}] uploading image ${fileName}`);
 
@@ -48,7 +48,7 @@ const uploadImage = (id, buffer, isGif) => {
   });
 };
 
-const manipulateImage = (id, url) => {
+const manipulateImage = (id, url, type) => {
   if (!url) {
     console.log(`[${id}] no image, skipping image processing`);
     return Promise.resolve({});
@@ -69,7 +69,7 @@ const manipulateImage = (id, url) => {
         const placeholderSize = Math.max(10, Math.floor(3 * ratio));
 
         const isGif = info.format === 'gif';
-        const uploadPromise = uploadImage(id, buffer, isGif);
+        const uploadPromise = uploadImage(id, buffer, isGif, type);
 
         const placeholderPromise = image.jpeg().resize(placeholderSize).toBuffer()
           .then(buffer => `data:image/jpeg;base64,${buffer.toString('base64')}`);
@@ -87,17 +87,18 @@ const manipulateImage = (id, url) => {
 exports.imager = (event) => {
   const pubsubMessage = event;
   const data = JSON.parse(Buffer.from(pubsubMessage.data, 'base64').toString());
+  const type = data.type || 'post';
 
-  return manipulateImage(data.id, data.image)
+  return manipulateImage(data.id, data.image, type)
     .then(res => Object.assign({}, data, res))
     .catch((err) => {
       console.warn(`[${data.id}] failed to process image`, err);
       return data;
     })
     .then((item) =>
-      createOrGetTopic()
+      createOrGetTopic(type)
         .then((topic) => {
-          console.log(`[${data.id}] post image processed`, item);
+          console.log(`[${data.id}] ${type} image processed`, item);
           return topic.publisher().publish(Buffer.from(JSON.stringify(item)));
         })
     );
