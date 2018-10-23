@@ -30,7 +30,11 @@ const checksum = (str, algorithm = 'md5', encoding = 'hex') => {
     .digest(encoding);
 };
 
-const uploadImage = (id, buffer, isGif, type) => {
+const uploadImage = (id, buffer, isGif, type, url) => {
+  if (isGif && type === 'post') {
+    return Promise.resolve(url);
+  }
+
   const fileName = checksum(buffer);
   const uploadPreset = isGif ? `${type}_animated` : `${type}_image`;
 
@@ -69,7 +73,7 @@ const manipulateImage = (id, url, type) => {
         const placeholderSize = Math.max(10, Math.floor(3 * ratio));
 
         const isGif = info.format === 'gif';
-        const uploadPromise = uploadImage(id, buffer, isGif, type);
+        const uploadPromise = uploadImage(id, buffer, isGif, type, url);
 
         const placeholderPromise = image.jpeg().resize(placeholderSize).toBuffer()
           .then(buffer => `data:image/jpeg;base64,${buffer.toString('base64')}`);
