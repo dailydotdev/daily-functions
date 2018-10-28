@@ -40,7 +40,7 @@ const convertTagsToSchema = (tags) => {
   }
   delete obj.modified;
   if (obj.keywords) {
-    obj.tags = obj.keywords.map(t => t.toLowerCase());
+    obj.tags = obj.keywords;
   }
   delete obj.keywords;
   return obj;

@@ -27,14 +27,29 @@ const wrapTwitterHandle = rule => ({ htmlDom }) => {
   return validatorTwitterHandle(value);
 };
 
-const validatorKeywordsHandle = value => {
+const validatorTags = values => values.map(v => v.toLowerCase().trim().replace(/ /g, '-'));
+
+const validatorKeywords = value => {
   if (!value || value.indexOf(',') < 0) return false;
-  return value.toLowerCase().split(',').map(s => s.trim().replace(/ /g, '-'));
+  return validatorTags(value.split(','));
 };
 
-const wrapKeywordsHandle = rule => ({ htmlDom }) => {
+const wrapDevToTags = rule => ({ htmlDom }) => {
+  const values = rule(htmlDom).map(t => t.replace('#', ''));
+  if (!values.length) return false;
+  return validatorTags(values);
+};
+
+const wrapMediumTags = rule => ({ htmlDom }) => {
+  const script = rule(htmlDom);
+  const json = JSON.parse(script);
+  if (!json || !json.keywords) return false;
+  return validatorTags(json.keywords.filter(t => t.indexOf('Tag:') > -1).map(t => t.replace('Tag:', '')));
+};
+
+const wrapKeywords = rule => ({ htmlDom }) => {
   const value = rule(htmlDom);
-  return validatorKeywordsHandle(value);
+  return validatorKeywords(value);
 };
 
 module.exports = () => {
@@ -57,7 +72,9 @@ module.exports = () => {
       wrapTwitterHandle($ => $('meta[name="twitter:creator"]').attr('content')),
     ],
     keywords: [
-      wrapKeywordsHandle($ => $('meta[name="keywords"]').attr('content')),
+      wrapDevToTags($ => $('.tags > .tag').toArray().map(el => $(el).text())),
+      wrapMediumTags($ => $('script[type="application/ld+json"]').html()),
+      wrapKeywords($ => $('meta[name="keywords"]').attr('content')),
     ],
   });
 };
