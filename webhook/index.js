@@ -69,7 +69,7 @@ exports.webhook = (req, res) => {
         return Promise.all(items.map((item) => ({
           id: crypto.createHash('md5').update(item.id).digest('hex'),
           title: item.title,
-          tags: item.categories ? item.categories : [],
+          tags: item.categories ? item.categories.map(c => c.toLowerCase()) : [],
           publishedAt: convertTime(item.published),
           updatedAt: convertTime(item.updated),
           publicationId: pubId,
