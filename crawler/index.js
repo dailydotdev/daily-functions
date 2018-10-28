@@ -40,11 +40,13 @@ const convertTagsToSchema = (tags) => {
   }
   delete obj.modified;
   if (obj.keywords) {
-    obj.tags = obj.keywords;
+    obj.tags = obj.keywords.map(t => t.toLowerCase());
   }
   delete obj.keywords;
   return obj;
 };
+
+const getIfTrue = (cond, key, value) => cond ? { [key]: value } : {};
 
 exports.crawler = (event) => {
   const pubsubMessage = event;
@@ -54,7 +56,7 @@ exports.crawler = (event) => {
 
   return extractMetaTags(data.url)
     .then(convertTagsToSchema)
-    .then(tags => Object.assign({}, data, tags, data.title ? { title: data.title } : {}, data.tags ? { tags: data.tags } : {}))
+    .then(tags => Object.assign({}, data, tags, getIfTrue(data.title, 'title', data.title), getIfTrue(data.tags && data.tags.length > 0, 'tags', data.tags)))
     .catch((err) => {
       if (err.statusCode === 404) {
         console.info(`[${data.id}] post doesn't exist anymore ${data.url}`);
