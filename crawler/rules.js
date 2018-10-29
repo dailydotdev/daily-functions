@@ -43,7 +43,7 @@ const wrapDevToTags = rule => ({ htmlDom }) => {
 const wrapMediumTags = rule => ({ htmlDom }) => {
   const script = rule(htmlDom);
   const json = JSON.parse(script);
-  if (!json || !json.keywords) return false;
+  if (!json || !json.keywords || !json.keywords.length) return false;
   return validatorTags(json.keywords.filter(t => t.indexOf('Tag:') > -1).map(t => t.replace('Tag:', '')));
 };
 
