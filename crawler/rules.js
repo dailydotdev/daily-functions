@@ -41,10 +41,14 @@ const wrapDevToTags = rule => ({ htmlDom }) => {
 };
 
 const wrapMediumTags = rule => ({ htmlDom }) => {
-  const script = rule(htmlDom);
-  const json = JSON.parse(script);
-  if (!json || !json.keywords || !json.keywords.filter) return false;
-  return validatorTags(json.keywords.filter(t => t.indexOf('Tag:') > -1).map(t => t.replace('Tag:', '')));
+  try {
+    const script = rule(htmlDom);
+    const json = JSON.parse(script);
+    if (!json || !json.keywords || !json.keywords.filter) return false;
+    return validatorTags(json.keywords.filter(t => t.indexOf('Tag:') > -1).map(t => t.replace('Tag:', '')));
+  } catch (ex) {
+    return false;
+  }
 };
 
 const wrapKeywords = rule => ({ htmlDom }) => {
