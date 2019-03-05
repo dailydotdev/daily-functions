@@ -2,9 +2,11 @@ const crypto = require('crypto');
 const request = require('request-promise-native');
 const sharp = require('sharp');
 const PubSub = require(`@google-cloud/pubsub`);
+const vision = require(`@google-cloud/vision`);
 const cloudinary = require('cloudinary');
 
 const pubsub = new PubSub();
+const annotatorClient = new vision.ImageAnnotatorClient();
 
 const createOrGetTopic = (type) => {
   const topicName = `${type}-image-processed`;
@@ -52,40 +54,60 @@ const uploadImage = (id, buffer, isGif, type, url) => {
   });
 };
 
+const veryLikely = detection => detection === 'VERY_LIKELY';
+
+const likelyOrGreater = detection =>
+  detection === 'LIKELY' || veryLikely(detection);
+
+const moderateContent = url =>
+  annotatorClient.safeSearchDetection(url)
+    .then(([result]) => {
+      const detections = result.safeSearchAnnotation;
+      return likelyOrGreater(detections.adult) || likelyOrGreater(detections.violence) || veryLikely(detections.racy);
+    });
+
 const manipulateImage = (id, url, type) => {
   if (!url) {
     console.log(`[${id}] no image, skipping image processing`);
     return Promise.resolve({});
   }
 
-  console.log(`[${id}] downloading ${url}`);
-  return request({
-    method: 'GET',
-    url,
-    encoding: null,
-  }).then((buffer) => {
-    const image = sharp(buffer);
-    return image.metadata()
-      .then((info) => {
-        console.log(`[${id}] processing image`);
+  return moderateContent(url)
+    .then((rejected) => {
+      if (rejected) {
+        console.warn(`[${id}] image rejected ${url}`);
+        return {};
+      }
 
-        const ratio = info.width / info.height;
-        const placeholderSize = Math.max(10, Math.floor(3 * ratio));
+      console.log(`[${id}] downloading ${url}`);
+      return request({
+        method: 'GET',
+        url,
+        encoding: null,
+      }).then((buffer) => {
+        const image = sharp(buffer);
+        return image.metadata()
+          .then((info) => {
+            console.log(`[${id}] processing image`);
 
-        const isGif = info.format === 'gif';
-        const uploadPromise = uploadImage(id, buffer, isGif, type, url);
+            const ratio = info.width / info.height;
+            const placeholderSize = Math.max(10, Math.floor(3 * ratio));
 
-        const placeholderPromise = image.jpeg().resize(placeholderSize).toBuffer()
-          .then(buffer => `data:image/jpeg;base64,${buffer.toString('base64')}`);
+            const isGif = info.format === 'gif';
+            const uploadPromise = uploadImage(id, buffer, isGif, type, url);
 
-        return Promise.all([uploadPromise, placeholderPromise])
-          .then(res => ({
-            image: res[0],
-            placeholder: res[1],
-            ratio,
-          }));
+            const placeholderPromise = image.jpeg().resize(placeholderSize).toBuffer()
+              .then(buffer => `data:image/jpeg;base64,${buffer.toString('base64')}`);
+
+            return Promise.all([uploadPromise, placeholderPromise])
+              .then(res => ({
+                image: res[0],
+                placeholder: res[1],
+                ratio,
+              }));
+          });
       });
-  });
+    });
 };
 
 exports.imager = (event) => {
@@ -109,5 +131,6 @@ exports.imager = (event) => {
 };
 
 // manipulateImage('', true ? 'https://cdn-images-1.medium.com/max/1600/1*GOx1lfu0QsRJEwd9HzmrYg.gif' : 'https://www.nodejsera.com/library/assets/img/30-days.png')
+// moderateContent('https://res.cloudinary.com/daily-now/image/upload/f_auto,q_auto/v1/posts/f01aac38b344de35afe8adb4f8820ac9')
 //   .then(console.log)
 //   .catch(console.error);
