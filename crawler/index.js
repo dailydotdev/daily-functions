@@ -48,6 +48,29 @@ const convertTagsToSchema = (tags) => {
 
 const getIfTrue = (cond, key, value) => cond ? { [key]: value } : {};
 
+const processTags = (data) => {
+  const filter = ['uncategorized'];
+
+  const trans = {
+    'web-development': 'webdev',
+    'front-end-development': 'frontend',
+    'frontend-development': 'frontend',
+  };
+  if (data.tags && data.tags.length) {
+    return Object.assign({}, data, {
+      tags: data.tags.filter(t => filter.indexOf(t) < 0).map(t => {
+        const newT = t.toLowerCase().trim().replace(/ /g, '-');
+        if (trans[newT]) {
+          return trans[newT];
+        }
+        return newT;
+      })
+    });
+  }
+
+  return data;
+};
+
 exports.crawler = (event) => {
   const pubsubMessage = event;
   const data = JSON.parse(Buffer.from(pubsubMessage.data, 'base64').toString());
@@ -66,6 +89,7 @@ exports.crawler = (event) => {
       console.warn(`[${data.id}] failed to scrape ${data.url}`, err);
       return data;
     })
+    .then(processTags)
     .then((item) => {
       if (!item) {
         return Promise.resolve();
@@ -79,7 +103,9 @@ exports.crawler = (event) => {
     });
 };
 
-// extractMetaTags('https://blogs.msdn.microsoft.com/devops/2018/09/13/search-msrc-fix-for-tfs-2017-update-3/')
+// extractMetaTags('https://blogs.msdn.microsoft.com/freddyk/2018/12/11/clean-up-after-yourself-docker-your-mom-isnt-here/')
 //   .then(convertTagsToSchema)
+//   .then(processTags)
 //   .then(console.log)
 //   .catch(err => console.error(err.statusCode));
+// console.log(processTags({tags: ['frontend', 'uncategorized']}));

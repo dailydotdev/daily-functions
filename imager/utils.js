@@ -4,11 +4,11 @@ const pubsub = new PubSub();
 const topic = pubsub.topic('crawled-post');
 // const topic = pubsub.topic('ad-image-processed');
 
-const link = 'http://go.thoughtleaders.io/549120181104';
-const description = 'Can you ace a coding interview? Make sure you can. Practice on Pramp - free interview prep with peers';
-const source = 'Pramp';
-const image = 'https://media.thoughtleaders.io/media/placements/2018/11/01/pramp_-_pic.png';
-const start = new Date('11/04/18Z');
+const link = 'https://vscode.pro/?utm_source=dailynowco';
+const description = '📺 VSCode.pro Course —Ahmad spent 1000+ hrs building a premium course with 200+ power user tips/tricks';
+const source = 'VSCode.pro  →';
+const image = 'https://raw.githubusercontent.com/ahmadawais/stuff/master/images/vscodepro/play.jpg';
+const start = new Date('11/26/18Z');
 
 const data = {
   id: crypto.createHash('md5').update(link).digest('hex'),
