@@ -4,6 +4,7 @@ const sharp = require('sharp');
 const PubSub = require(`@google-cloud/pubsub`);
 const vision = require(`@google-cloud/vision`);
 const cloudinary = require('cloudinary');
+const pRetry = require('p-retry');
 
 const pubsub = new PubSub();
 const annotatorClient = new vision.ImageAnnotatorClient();
@@ -115,7 +116,7 @@ exports.imager = (event) => {
   const data = JSON.parse(Buffer.from(pubsubMessage.data, 'base64').toString());
   const type = data.type || 'post';
 
-  return manipulateImage(data.id, data.image, type)
+  return pRetry(() => manipulateImage(data.id, data.image, type), { retries: 5 })
     .then(res => Object.assign({}, data, res))
     .catch((err) => {
       console.warn(`[${data.id}] failed to process image`, err);
@@ -131,6 +132,6 @@ exports.imager = (event) => {
 };
 
 // manipulateImage('', true ? 'https://cdn-images-1.medium.com/max/1600/1*GOx1lfu0QsRJEwd9HzmrYg.gif' : 'https://www.nodejsera.com/library/assets/img/30-days.png')
-// moderateContent('https://res.cloudinary.com/daily-now/image/upload/f_auto,q_auto/v1/posts/f01aac38b344de35afe8adb4f8820ac9')
+// moderateContent('https://cdn-images-1.medium.com/max/1200/1*_W_tXbvL9_Odd7dDxqO4-A.png')
 //   .then(console.log)
 //   .catch(console.error);

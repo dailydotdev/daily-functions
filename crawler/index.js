@@ -108,4 +108,4 @@ exports.crawler = (event) => {
 //   .then(processTags)
 //   .then(console.log)
 //   .catch(err => console.error(err.statusCode));
-console.log(processTags({ tags: ['frontend', 'uncategorized'] }));
+// console.log(processTags({ tags: ['frontend', 'uncategorized'] }));
