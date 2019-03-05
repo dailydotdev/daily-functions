@@ -68,7 +68,7 @@ const processTags = (data) => {
     });
   }
 
-  return Array.from(new Set(data));
+  return data;
 };
 
 exports.crawler = (event) => {
