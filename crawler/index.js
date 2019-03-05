@@ -58,17 +58,17 @@ const processTags = (data) => {
   };
   if (data.tags && data.tags.length) {
     return Object.assign({}, data, {
-      tags: data.tags.filter(t => filter.indexOf(t) < 0).map(t => {
+      tags: Array.from(new Set(data.tags.filter(t => filter.indexOf(t) < 0).map(t => {
         const newT = t.toLowerCase().trim().replace(/ /g, '-');
         if (trans[newT]) {
           return trans[newT];
         }
         return newT;
-      })
+      })))
     });
   }
 
-  return data;
+  return Array.from(new Set(data));
 };
 
 exports.crawler = (event) => {
@@ -108,4 +108,4 @@ exports.crawler = (event) => {
 //   .then(processTags)
 //   .then(console.log)
 //   .catch(err => console.error(err.statusCode));
-// console.log(processTags({tags: ['frontend', 'uncategorized']}));
+console.log(processTags({ tags: ['frontend', 'uncategorized'] }));
