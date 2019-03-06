@@ -64,7 +64,11 @@ const moderateContent = url =>
   annotatorClient.safeSearchDetection(url)
     .then(([result]) => {
       const detections = result.safeSearchAnnotation;
-      return likelyOrGreater(detections.adult) || likelyOrGreater(detections.violence) || veryLikely(detections.racy);
+      if (detections) {
+        return likelyOrGreater(detections.adult) || likelyOrGreater(detections.violence) || veryLikely(detections.racy);
+      }
+
+      throw result.error;
     });
 
 const manipulateImage = (id, url, type) => {
@@ -116,7 +120,7 @@ exports.imager = (event) => {
   const data = JSON.parse(Buffer.from(pubsubMessage.data, 'base64').toString());
   const type = data.type || 'post';
 
-  return pRetry(() => manipulateImage(data.id, data.image, type), { retries: 5 })
+  return pRetry(() => manipulateImage(data.id, data.image, type))
     .then(res => Object.assign({}, data, res))
     .catch((err) => {
       console.warn(`[${data.id}] failed to process image`, err);
@@ -132,6 +136,6 @@ exports.imager = (event) => {
 };
 
 // manipulateImage('', true ? 'https://cdn-images-1.medium.com/max/1600/1*GOx1lfu0QsRJEwd9HzmrYg.gif' : 'https://www.nodejsera.com/library/assets/img/30-days.png')
-// moderateContent('https://cdn-images-1.medium.com/max/1200/1*_W_tXbvL9_Odd7dDxqO4-A.png')
+// moderateContent('https://cdn-images-1.medium.com/max/1200/1*_W_tXbvL9_Odd7dDxqO4-A2.png')
 //   .then(console.log)
 //   .catch(console.error);
