@@ -96,6 +96,7 @@ module.exports = () => {
       wrapReadTime($ => $('.episode-body-summary').html()),
       wrapReadTime($ => $('article').html()),
       wrapReadTime($ => $('#readme').html()),
+      wrapReadTime($ => $('.post__content').html()),
     ],
   });
 };
