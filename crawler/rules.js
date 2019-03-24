@@ -1,4 +1,5 @@
 const { getUrl, isUrl } = require('@metascraper/helpers');
+const readTimeEstimate = require('read-time-estimate');
 
 const validatorTime = value => {
   if (!value) return false;
@@ -56,6 +57,14 @@ const wrapKeywords = rule => ({ htmlDom }) => {
   return validatorKeywords(value);
 };
 
+const wrapReadTime = rule => ({ htmlDom }) => {
+  const element = rule(htmlDom);
+  if (element) {
+    return readTimeEstimate.default(element);
+  }
+  return false;
+};
+
 module.exports = () => {
   return ({
     modified: [
@@ -79,6 +88,14 @@ module.exports = () => {
       wrapDevToTags($ => $('.tags > .tag').toArray().map(el => $(el).text())),
       wrapMediumTags($ => $('script[type="application/ld+json"]').html()),
       wrapKeywords($ => $('meta[name="keywords"]').attr('content')),
+    ],
+    readTime: [
+      wrapReadTime($ => $('.article__data').html()),
+      wrapReadTime($ => $('.article-content').html()),
+      wrapReadTime($ => $('.uni-paragraph').html()),
+      wrapReadTime($ => $('.episode-body-summary').html()),
+      wrapReadTime($ => $('article').html()),
+      wrapReadTime($ => $('#readme').html()),
     ],
   });
 };

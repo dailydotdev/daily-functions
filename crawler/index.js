@@ -27,7 +27,8 @@ const createOrGetTopic = () => {
 
 const extractMetaTags = (url) =>
   got(url)
-    .then(({ body: html, url }) => metascraper({ html, url }));
+    .then(({ body: html, url }) => metascraper({ html, url }))
+    .then(res => Object.assign({}, res, { readTime: res.readTime ? res.readTime.duration : null }));
 
 const convertTagsToSchema = (tags) => {
   const obj = Object.assign({}, tags);
@@ -58,7 +59,7 @@ const processTags = (data) => {
   };
   if (data.tags && data.tags.length) {
     return Object.assign({}, data, {
-      tags: Array.from(new Set(data.tags.filter(t => filter.indexOf(t) < 0).map(t => {
+      tags: Array.from(new Set(data.tags.filter(t => t.length > 0 && filter.indexOf(t) < 0).map(t => {
         const newT = t.toLowerCase().trim().replace(/ /g, '-');
         if (trans[newT]) {
           return trans[newT];
@@ -107,5 +108,4 @@ exports.crawler = (event) => {
 //   .then(convertTagsToSchema)
 //   .then(processTags)
 //   .then(console.log)
-//   .catch(err => console.error(err.statusCode));
-// console.log(processTags({ tags: ['frontend', 'uncategorized'] }));
+//   .catch(console.error);
