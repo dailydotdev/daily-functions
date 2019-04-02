@@ -81,7 +81,7 @@ const manipulateImage = (id, url, type) => {
     .then((rejected) => {
       if (rejected) {
         console.warn(`[${id}] image rejected ${url}`);
-        return {};
+        return false;
       }
 
       console.log(`[${id}] downloading ${url}`);
@@ -116,23 +116,26 @@ const manipulateImage = (id, url, type) => {
 };
 
 exports.imager = (event) => {
-  const pubsubMessage = event;
-  const data = JSON.parse(Buffer.from(pubsubMessage.data, 'base64').toString());
+  const data = JSON.parse(Buffer.from(event.data, 'base64').toString());
   const type = data.type || 'post';
 
   return pRetry(() => manipulateImage(data.id, data.image, type))
-    .then(res => Object.assign({}, data, res))
+    .then(res => {
+      if (res) {
+        const item = Object.assign({}, data, res);
+        return createOrGetTopic(type)
+          .then((topic) => {
+            console.log(`[${data.id}] ${type} image processed`, item);
+            return topic.publisher().publish(Buffer.from(JSON.stringify(item)));
+          });
+      } else {
+        console.warn(`[${data.id}] image rejected`);
+      }
+    })
     .catch((err) => {
       console.warn(`[${data.id}] failed to process image`, err);
       return data;
-    })
-    .then((item) =>
-      createOrGetTopic(type)
-        .then((topic) => {
-          console.log(`[${data.id}] ${type} image processed`, item);
-          return topic.publisher().publish(Buffer.from(JSON.stringify(item)));
-        })
-    );
+    });
 };
 
 // manipulateImage('', true ? 'https://cdn-images-1.medium.com/max/1600/1*GOx1lfu0QsRJEwd9HzmrYg.gif' : 'https://www.nodejsera.com/library/assets/img/30-days.png')
