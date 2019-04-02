@@ -65,7 +65,7 @@ const moderateContent = url =>
     .then(([result]) => {
       const detections = result.safeSearchAnnotation;
       if (detections) {
-        return likelyOrGreater(detections.adult) || likelyOrGreater(detections.violence) || veryLikely(detections.racy);
+        return likelyOrGreater(detections.adult) || likelyOrGreater(detections.violence) || likelyOrGreater(detections.racy);
       }
 
       throw result.error;
@@ -136,6 +136,6 @@ exports.imager = (event) => {
 };
 
 // manipulateImage('', true ? 'https://cdn-images-1.medium.com/max/1600/1*GOx1lfu0QsRJEwd9HzmrYg.gif' : 'https://www.nodejsera.com/library/assets/img/30-days.png')
-// moderateContent('https://cdn-images-1.medium.com/max/1200/1*_W_tXbvL9_Odd7dDxqO4-A2.png')
+// moderateContent('https://res.cloudinary.com/daily-now/image/upload/v1554148819/posts/f2d02c25a0221911f5446a8057872c05.jpg')
 //   .then(console.log)
 //   .catch(console.error);
