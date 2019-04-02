@@ -2,12 +2,15 @@ const crypto = require('crypto');
 const request = require('request-promise-native');
 const sharp = require('sharp');
 const PubSub = require(`@google-cloud/pubsub`);
-const vision = require(`@google-cloud/vision`);
 const cloudinary = require('cloudinary');
 const pRetry = require('p-retry');
+const Clarifai = require('clarifai');
+
+const clarifai = new Clarifai.App({
+  apiKey: process.env.CLARIFAI_KEY,
+});
 
 const pubsub = new PubSub();
-const annotatorClient = new vision.ImageAnnotatorClient();
 
 const createOrGetTopic = (type) => {
   const topicName = `${type}-image-processed`;
@@ -55,21 +58,10 @@ const uploadImage = (id, buffer, isGif, type, url) => {
   });
 };
 
-const veryLikely = detection => detection === 'VERY_LIKELY';
-
-const likelyOrGreater = detection =>
-  detection === 'LIKELY' || veryLikely(detection);
-
 const moderateContent = url =>
-  annotatorClient.safeSearchDetection(url)
-    .then(([result]) => {
-      const detections = result.safeSearchAnnotation;
-      if (detections) {
-        return likelyOrGreater(detections.adult) || likelyOrGreater(detections.violence) || likelyOrGreater(detections.racy);
-      }
-
-      throw result.error;
-    });
+  clarifai.models.predict(Clarifai.NSFW_MODEL, url)
+    .then(res =>
+      res.outputs[0].data.concepts.find(c => c.name === 'nsfw').value >= 0.5);
 
 const manipulateImage = (id, url, type) => {
   if (!url) {
