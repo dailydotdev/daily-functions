@@ -61,7 +61,7 @@ const uploadImage = (id, buffer, isGif, type, url) => {
 const moderateContent = url =>
   clarifai.models.predict(Clarifai.NSFW_MODEL, url)
     .then(res =>
-      res.outputs[0].data.concepts.find(c => c.name === 'nsfw').value >= 0.5);
+      res.outputs[0].data.concepts.find(c => c.name === 'nsfw').value >= 0.6);
 
 const manipulateImage = (id, url, type) => {
   if (!url) {
