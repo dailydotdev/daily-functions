@@ -37,7 +37,7 @@ const checksum = (str, algorithm = 'md5', encoding = 'hex') => {
 };
 
 const uploadImage = (id, buffer, isGif, type, url) => {
-  if (isGif && type === 'post') {
+  if (isGif) {
     return Promise.resolve(url);
   }
 
@@ -58,10 +58,15 @@ const uploadImage = (id, buffer, isGif, type, url) => {
   });
 };
 
-const moderateContent = url =>
-  clarifai.models.predict(Clarifai.NSFW_MODEL, url)
-    .then(res =>
-      res.outputs[0].data.concepts.find(c => c.name === 'nsfw').value >= 0.6);
+const moderateContent = (url, type) => {
+  if (type === 'post') {
+    return clarifai.models.predict(Clarifai.NSFW_MODEL, url)
+      .then(res =>
+        res.outputs[0].data.concepts.find(c => c.name === 'nsfw').value >= 0.6);
+  }
+
+  return Promise.resolve(false);
+};
 
 const manipulateImage = (id, url, type) => {
   if (!url) {
@@ -69,7 +74,7 @@ const manipulateImage = (id, url, type) => {
     return Promise.resolve({});
   }
 
-  return moderateContent(url)
+  return moderateContent(url, type)
     .then((rejected) => {
       if (rejected) {
         console.warn(`[${id}] image rejected ${url}`);
@@ -130,7 +135,7 @@ exports.imager = (event) => {
     });
 };
 
-// manipulateImage('', true ? 'https://cdn-images-1.medium.com/max/1600/1*GOx1lfu0QsRJEwd9HzmrYg.gif' : 'https://www.nodejsera.com/library/assets/img/30-days.png')
+// manipulateImage('', 'https://storage.googleapis.com/devkit-assets/ads/daily2_upcoming.gif', 'ad')
 // moderateContent('https://res.cloudinary.com/daily-now/image/upload/v1554148819/posts/f2d02c25a0221911f5446a8057872c05.jpg')
 //   .then(console.log)
 //   .catch(console.error);
