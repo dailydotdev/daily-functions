@@ -58,23 +58,23 @@ const uploadImage = (id, buffer, isGif, type, url) => {
   });
 };
 
-const moderateContent = (url, type) => {
-  if (type === 'post') {
-    return clarifai.models.predict(Clarifai.NSFW_MODEL, url)
-      .then(res =>
-        res.outputs[0].data.concepts.find(c => c.name === 'nsfw').value >= 0.6);
+const moderateContent = (url, title) => {
+  if (title.toLowerCase().indexOf('escort') > -1) {
+    return Promise.resolve(true);
   }
 
-  return Promise.resolve(false);
+  return clarifai.models.predict(Clarifai.NSFW_MODEL, url)
+    .then(res =>
+      res.outputs[0].data.concepts.find(c => c.name === 'nsfw').value >= 0.6);
 };
 
-const manipulateImage = (id, url, type) => {
+const manipulateImage = (id, url, title, type) => {
   if (!url) {
     console.log(`[${id}] no image, skipping image processing`);
     return Promise.resolve({});
   }
 
-  return moderateContent(url, type)
+  return moderateContent(url, title)
     .then((rejected) => {
       if (rejected) {
         console.warn(`[${id}] image rejected ${url}`);
@@ -116,7 +116,7 @@ exports.imager = (event) => {
   const data = JSON.parse(Buffer.from(event.data, 'base64').toString());
   const type = data.type || 'post';
 
-  return pRetry(() => manipulateImage(data.id, data.image, type))
+  return pRetry(() => manipulateImage(data.id, data.image, data.title, type))
     .then(res => {
       if (res) {
         const item = Object.assign({}, data, res);
