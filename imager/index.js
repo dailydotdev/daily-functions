@@ -117,7 +117,7 @@ exports.imager = (event) => {
   const data = JSON.parse(Buffer.from(event.data, 'base64').toString());
   const type = data.type || 'post';
 
-  return pTimeout(pRetry(() => manipulateImage(data.id, data.image, data.title, type)), 60)
+  return pTimeout(pRetry(() => manipulateImage(data.id, data.image, data.title, type)), 60 * 1000)
     .then(res => {
       if (res) {
         const item = Object.assign({}, data, res);
