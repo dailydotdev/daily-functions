@@ -4,7 +4,6 @@ const sharp = require('sharp');
 const PubSub = require(`@google-cloud/pubsub`);
 const cloudinary = require('cloudinary');
 const pRetry = require('p-retry');
-const pTimeout = require('p-timeout');
 const Clarifai = require('clarifai');
 
 const clarifai = new Clarifai.App({
@@ -117,7 +116,7 @@ exports.imager = (event) => {
   const data = JSON.parse(Buffer.from(event.data, 'base64').toString());
   const type = data.type || 'post';
 
-  return pTimeout(pRetry(() => manipulateImage(data.id, data.image, data.title, type)), 90 * 1000)
+  return pRetry(() => manipulateImage(data.id, data.image, data.title, type))
     .then(res => {
       if (res) {
         const item = Object.assign({}, data, res);
