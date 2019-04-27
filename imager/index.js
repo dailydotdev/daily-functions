@@ -59,7 +59,7 @@ const uploadImage = (id, buffer, isGif, type, url) => {
 };
 
 const moderateContent = (url, title) => {
-  if (title.toLowerCase().indexOf('escort') > -1) {
+  if (title && title.toLowerCase().indexOf('escort') > -1) {
     return Promise.resolve(true);
   }
 
