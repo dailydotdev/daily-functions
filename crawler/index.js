@@ -50,22 +50,30 @@ const convertTagsToSchema = (tags) => {
 const getIfTrue = (cond, key, value) => cond ? { [key]: value } : {};
 
 const processTags = (data) => {
-  const filter = ['uncategorized'];
+  const filter = ['uncategorized', 'architecture-&-design', 'towards-data-science'];
 
   const trans = {
     'web-development': 'webdev',
     'front-end-development': 'frontend',
     'frontend-development': 'frontend',
+    'software-development': 'development',
+    'programming': 'development',
+    'coding': 'development',
+    'vuejs': 'vue',
+    'reactjs': 'react',
+    'technology': 'tech',
+    'artificial-intelligence': 'ai',
+    'go': 'golang',
   };
   if (data.tags && data.tags.length) {
     return Object.assign({}, data, {
-      tags: Array.from(new Set(data.tags.filter(t => t.length > 0 && filter.indexOf(t) < 0).map(t => {
+      tags: Array.from(new Set(data.tags.map(t => {
         const newT = t.toLowerCase().trim().replace(/ /g, '-');
         if (trans[newT]) {
           return trans[newT];
         }
         return newT;
-      })))
+      }).filter(t => t.length > 0 && filter.indexOf(t) < 0)))
     });
   }
 
