@@ -41,8 +41,9 @@ const uploadImage = (id, buffer, isGif, type, url) => {
     return Promise.resolve(url);
   }
 
+  const isSvg = url.indexOf('.svg') > 0;
   const fileName = checksum(buffer);
-  const uploadPreset = isGif ? `${type}_animated` : `${type}_image`;
+  const uploadPreset = isSvg ? undefined : `${type}_image`;
 
   console.log(`[${id}] uploading image ${fileName}`);
 
@@ -61,6 +62,10 @@ const uploadImage = (id, buffer, isGif, type, url) => {
 const moderateContent = (url, title) => {
   if (title && title.toLowerCase().indexOf('escort') > -1) {
     return Promise.resolve(true);
+  }
+
+  if (url.indexOf('.svg') > 0) {
+    return Promise.resolve(false);
   }
 
   return clarifai.models.predict(Clarifai.NSFW_MODEL, url)
@@ -135,7 +140,7 @@ exports.imager = (event) => {
     });
 };
 
-// manipulateImage('', 'https://storage.googleapis.com/devkit-assets/ads/daily2_upcoming.gif', 'ad')
+// manipulateImage('', 'https://istio.io/img/istio-whitelogo-bluebackground-framed.svg', 'title')
 // moderateContent('https://res.cloudinary.com/daily-now/image/upload/v1554148819/posts/f2d02c25a0221911f5446a8057872c05.jpg')
 //   .then(console.log)
 //   .catch(console.error);
