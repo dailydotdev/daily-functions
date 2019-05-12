@@ -38,7 +38,7 @@ const payloads = fs.readFileSync('sources.csv')
   .toString()
   .split('\n')
   .map((line) => {
-    const cols = line.split(',');
+    const cols = line.split('\t');
     return {
       'hub.mode': 'subscribe',
       'hub.topic': cols[1],

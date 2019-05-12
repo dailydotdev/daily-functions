@@ -41,12 +41,29 @@ const wrapDevToTags = rule => ({ htmlDom }) => {
   return validatorTags(values);
 };
 
+const wrapElementTextTags = rule => ({ htmlDom }) => {
+  const values = rule(htmlDom);
+  if (!values.length) return false;
+  return validatorTags(values);
+};
+
 const wrapMediumTags = rule => ({ htmlDom }) => {
   try {
     const script = rule(htmlDom);
     const json = JSON.parse(script);
     if (!json || !json.keywords || !json.keywords.filter) return false;
     return validatorTags(json.keywords.filter(t => t.indexOf('Tag:') > -1).map(t => t.replace('Tag:', '')));
+  } catch (ex) {
+    return false;
+  }
+};
+
+const wrapProductHuntTags = rule => ({ htmlDom }) => {
+  try {
+    const script = rule(htmlDom);
+    const json = JSON.parse(script);
+    if (!json || !json.length || !json[0].applicationCategory || !json[0].applicationCategory.length) return false;
+    return validatorTags(json[0].applicationCategory);
   } catch (ex) {
     return false;
   }
@@ -87,6 +104,14 @@ module.exports = () => {
     keywords: [
       wrapDevToTags($ => $('.tags > .tag').toArray().map(el => $(el).text())),
       wrapMediumTags($ => $('script[type="application/ld+json"]').html()),
+      wrapProductHuntTags($ => $('script[type="application/ld+json"]').html()),
+      wrapElementTextTags($ => $('.tags > a').toArray().map(el => $(el).text())),
+      wrapDevToTags($ => $('.breadcrumbs > a').toArray().map(el => $(el).text())),
+      wrapElementTextTags($ => $('.blog-tag').toArray().map(el => $(el).text())),
+      wrapElementTextTags($ => $('.meta-box--tags > a').toArray().map(el => $(el).text())),
+      wrapElementTextTags($ => $('.post .category').toArray().map(el => $(el).text())),
+      wrapElementTextTags($ => $('.content-heading__secondary-categories a').toArray().map(el => $(el).text())),
+      wrapElementTextTags($ => $('.post__tags a').toArray().map(el => $(el).text())),
       wrapKeywords($ => $('meta[name="keywords"]').attr('content')),
     ],
     readTime: [
