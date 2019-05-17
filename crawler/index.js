@@ -50,20 +50,36 @@ const convertTagsToSchema = (tags) => {
 const getIfTrue = (cond, key, value) => cond ? { [key]: value } : {};
 
 const processTags = (data) => {
-  const filter = ['uncategorized', 'architecture-&-design', 'towards-data-science'];
+  const filter = ['uncategorized', 'architecture-&-design', 'towards-data-science', 'ai,-ml-&-data-engineering', 'article', 'tc'];
 
   const trans = {
     'web-development': 'webdev',
+    'web-dev': 'webdev',
     'front-end-development': 'frontend',
     'frontend-development': 'frontend',
     'software-development': 'development',
+    'app-development': 'development',
     'programming': 'development',
     'coding': 'development',
+    'developer': 'development',
+    'engineering': 'development',
+    'software-engineering': 'development',
     'vuejs': 'vue',
     'reactjs': 'react',
     'technology': 'tech',
     'artificial-intelligence': 'ai',
     'go': 'golang',
+    'careers': 'career',
+    'cloud-computing': 'cloud',
+    'culture-&-methods': 'culture',
+    'data-scientist': 'data-science',
+    'life-lessons': 'life',
+    'mobile-app-development': 'mobile',
+    'node': 'nodejs',
+    'personal-growth': 'personal-development',
+    'self-improvement': 'personal-development',
+    'self': 'personal-development',
+    'startup': 'startups',
   };
   if (data.tags && data.tags.length) {
     return Object.assign({}, data, {
