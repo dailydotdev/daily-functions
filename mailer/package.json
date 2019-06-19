@@ -1,0 +1,14 @@
+{
+  "name": "daily-mailer",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "deploy": "gcloud --project devkit-prod beta functions deploy mailer --runtime nodejs8 --trigger-resource pub-request --trigger-event google.pubsub.topic.publish --env-vars-file .env.yaml"
+  },
+  "engines": {
+    "node": "~8.11.0"
+  },
+  "dependencies": {
+    "@sendgrid/mail": "^6.4.0"
+  }
+}
