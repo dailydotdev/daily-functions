@@ -9,12 +9,12 @@
     "node": "~8.11.0"
   },
   "dependencies": {
-    "@google-cloud/pubsub": "^0.19.0",
-    "got": "^9.0.0",
-    "metascraper": "^3.11.12",
+    "@google-cloud/pubsub": "^0.19.1",
+    "got": "^9.6.0",
+    "metascraper": "^3.12.1",
     "metascraper-date": "^3.11.4",
-    "metascraper-title": "^3.11.8",
-    "metascraper-url": "^3.11.8",
+    "metascraper-title": "^3.12.1",
+    "metascraper-url": "^3.12.1",
     "read-time-estimate": "0.0.2"
   },
   "devDependencies": {
