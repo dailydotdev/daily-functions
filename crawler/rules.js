@@ -82,6 +82,13 @@ const wrapReadTime = rule => ({ htmlDom }) => {
   return false;
 };
 
+const wrapMediumPaywall = rule => ({ htmlDom }) => {
+  const elements = rule(htmlDom);
+  const star = elements.filter(el => (el.attr('class') && el.attr('class').indexOf('star') > -1));
+  // Workaround as you must return string, otherwise value is ignored
+  return star.length > 0 ? 'true' : false;
+};
+
 module.exports = () => {
   return ({
     modified: [
@@ -122,6 +129,9 @@ module.exports = () => {
       wrapReadTime($ => $('article').html()),
       wrapReadTime($ => $('#readme').html()),
       wrapReadTime($ => $('.post__content').html()),
+    ],
+    paid: [
+      wrapMediumPaywall($ => $('svg').toArray().map(el => $(el))),
     ],
   });
 };
