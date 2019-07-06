@@ -28,7 +28,10 @@ const createOrGetTopic = () => {
 const extractMetaTags = (url) =>
   got(url)
     .then(({ body: html, url }) => metascraper({ html, url }))
-    .then(res => Object.assign({}, res, { readTime: res.readTime ? res.readTime.duration : null }));
+    .then(res => Object.assign({}, res, {
+      readTime: res.readTime ? res.readTime.duration : null,
+      paid: res.paid === 'true',
+    }));
 
 const convertTagsToSchema = (tags) => {
   const obj = Object.assign({}, tags);
@@ -89,7 +92,7 @@ const processTags = (data) => {
           return trans[newT];
         }
         return newT;
-      }).filter(t => t.length > 0 && filter.indexOf(t) < 0)))
+      }).filter(t => t.length > 0 && filter.indexOf(t) < 0))),
     });
   }
 
@@ -117,6 +120,11 @@ exports.crawler = (event) => {
     .then(processTags)
     .then((item) => {
       if (!item) {
+        return Promise.resolve();
+      }
+
+      if (item.paid) {
+        console.log(`[${data.id}] paid content is ignored`, item);
         return Promise.resolve();
       }
 
