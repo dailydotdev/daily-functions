@@ -82,9 +82,11 @@ const wrapReadTime = rule => ({ htmlDom }) => {
   return false;
 };
 
+const testForStar = el => el.attr('class') && el.attr('class').indexOf('star') > -1;
+
 const wrapMediumPaywall = rule => ({ htmlDom }) => {
   const elements = rule(htmlDom);
-  const star = elements.filter(el => (el.attr('class') && el.attr('class').indexOf('star') > -1));
+  const star = elements.filter(el => (testForStar(el) || testForStar(el.parent())));
   // Workaround as you must return string, otherwise value is ignored
   return star.length > 0 ? 'true' : false;
 };
