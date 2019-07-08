@@ -82,7 +82,8 @@ const wrapReadTime = rule => ({ htmlDom }) => {
   return false;
 };
 
-const testForStar = el => el.attr('class') && el.attr('class').indexOf('star') > -1;
+const testForStar = el =>
+  el.attr('class') && el.attr('class').indexOf('star') > -1 && el.attr('class').indexOf('svgIcon') > -1;
 
 const wrapMediumPaywall = rule => ({ htmlDom }) => {
   const elements = rule(htmlDom);
