@@ -72,7 +72,7 @@ exports.webhook = (req, res) => {
           publishedAt: convertTime(item.published),
           updatedAt: convertTime(item.updated),
           publicationId: pubId,
-          url: item.permalinkUrl.split('?').shift(),
+          url: item.permalinkUrl,
         })).map((item) => {
           console.log(`[${item.id}] post fetched`, item);
           return publisher.publish(Buffer.from(JSON.stringify(item)));
