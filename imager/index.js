@@ -116,7 +116,7 @@ const manipulateImage = (id, url, title, type) => {
       });
     })
     .catch((err) => {
-      if (err.status === 400) {
+      if (err.status === 400 || err.statusCode === 403) {
         console.warn(`[${id}] failed to check image ${url}`);
         return Promise.resolve({ image: null });
       }
