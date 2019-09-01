@@ -73,6 +73,37 @@ const moderateContent = (url, title) => {
       res.outputs[0].data.concepts.find(c => c.name === 'nsfw').value >= 0.6);
 };
 
+const downloadAndUpload = (id, url, type) => {
+  console.log(`[${id}] downloading ${url}`);
+  return request({
+    method: 'GET',
+    url,
+    encoding: null,
+  }).then((buffer) => {
+    const image = sharp(buffer);
+    return image.metadata()
+      .then((info) => {
+        console.log(`[${id}] processing image`);
+
+        const ratio = info.width / info.height;
+        const placeholderSize = Math.max(10, Math.floor(3 * ratio));
+
+        const isGif = info.format === 'gif';
+        const uploadPromise = uploadImage(id, buffer, isGif, type, url);
+
+        const placeholderPromise = image.jpeg().resize(placeholderSize).toBuffer()
+          .then(buffer => `data:image/jpeg;base64,${buffer.toString('base64')}`);
+
+        return Promise.all([uploadPromise, placeholderPromise])
+          .then(res => ({
+            image: res[0],
+            placeholder: res[1],
+            ratio,
+          }));
+      });
+  });
+};
+
 const manipulateImage = (id, url, title, type) => {
   if (!url) {
     console.log(`[${id}] no image, skipping image processing`);
@@ -86,34 +117,11 @@ const manipulateImage = (id, url, title, type) => {
         return false;
       }
 
-      console.log(`[${id}] downloading ${url}`);
-      return request({
-        method: 'GET',
-        url,
-        encoding: null,
-      }).then((buffer) => {
-        const image = sharp(buffer);
-        return image.metadata()
-          .then((info) => {
-            console.log(`[${id}] processing image`);
-
-            const ratio = info.width / info.height;
-            const placeholderSize = Math.max(10, Math.floor(3 * ratio));
-
-            const isGif = info.format === 'gif';
-            const uploadPromise = uploadImage(id, buffer, isGif, type, url);
-
-            const placeholderPromise = image.jpeg().resize(placeholderSize).toBuffer()
-              .then(buffer => `data:image/jpeg;base64,${buffer.toString('base64')}`);
-
-            return Promise.all([uploadPromise, placeholderPromise])
-              .then(res => ({
-                image: res[0],
-                placeholder: res[1],
-                ratio,
-              }));
-          });
-      });
+      return pRetry(() => downloadAndUpload(id, url, type), { retries: 5 })
+        .catch((err) => {
+          console.warn(err);
+          return {};
+        });
     })
     .catch((err) => {
       if (err.status === 400 || err.statusCode === 403) {
@@ -128,7 +136,7 @@ exports.imager = (event) => {
   const data = JSON.parse(Buffer.from(event.data, 'base64').toString());
   const type = data.type || 'post';
 
-  return pRetry(() => manipulateImage(data.id, data.image, data.title, type))
+  return manipulateImage(data.id, data.image, data.title, type)
     .then(res => {
       if (res) {
         const item = Object.assign({}, data, res);

@@ -122,7 +122,7 @@ module.exports = () => {
       wrapElementTextTags($ => $('.post .category').toArray().map(el => $(el).text())),
       wrapElementTextTags($ => $('.content-heading__secondary-categories a').toArray().map(el => $(el).text())),
       wrapElementTextTags($ => $('.post__tags a').toArray().map(el => $(el).text())),
-      wrapKeywords($ => $('meta[name="keywords"]').attr('content')),
+      // wrapKeywords($ => $('meta[name="keywords"]').attr('content')),
     ],
     readTime: [
       wrapReadTime($ => $('.article__data').html()),
