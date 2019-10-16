@@ -3,15 +3,14 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "deploy": "gcloud --project devkit-prod beta functions deploy imager --runtime nodejs8 --trigger-resource crawled-post --trigger-event google.pubsub.topic.publish --env-vars-file .env.yaml --timeout 120"
+    "deploy": "gcloud --project devkit-prod beta functions deploy imager --runtime nodejs10 --trigger-resource crawled-post --trigger-event google.pubsub.topic.publish --env-vars-file .env.yaml --timeout 120"
   },
   "engines": {
-    "node": "~8.11.0"
+    "node": "~10.15.0"
   },
   "dependencies": {
     "@google-cloud/pubsub": "^0.19.1",
     "@google-cloud/vision": "^0.25.0",
-    "clarifai": "^2.9.0",
     "cloudinary": "^1.14.0",
     "p-retry": "^3.0.1",
     "p-timeout": "^3.1.0",

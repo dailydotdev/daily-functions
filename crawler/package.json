@@ -3,10 +3,10 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "deploy": "gcloud --project devkit-prod beta functions deploy crawler --runtime nodejs8 --trigger-resource post-fetched --trigger-event google.pubsub.topic.publish"
+    "deploy": "gcloud --project devkit-prod beta functions deploy crawler --runtime nodejs10 --trigger-resource post-fetched --trigger-event google.pubsub.topic.publish"
   },
   "engines": {
-    "node": "~8.11.0"
+    "node": "~10.15.0"
   },
   "dependencies": {
     "@google-cloud/pubsub": "^0.19.1",

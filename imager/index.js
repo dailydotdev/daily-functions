@@ -4,11 +4,6 @@ const sharp = require('sharp');
 const PubSub = require(`@google-cloud/pubsub`);
 const cloudinary = require('cloudinary');
 const pRetry = require('p-retry');
-const Clarifai = require('clarifai');
-
-const clarifai = new Clarifai.App({
-  apiKey: process.env.CLARIFAI_KEY,
-});
 
 const pubsub = new PubSub();
 
@@ -45,7 +40,7 @@ const uploadImage = (id, buffer, isGif, type, url) => {
   const fileName = checksum(buffer);
   const uploadPreset = isSvg ? undefined : `${type}_image`;
 
-  console.log(`[${id}] uploading image ${fileName}`);
+  console.log(`[${id}] uploading image ${fileName} with preset ${uploadPreset}`);
 
   return new Promise((resolve, reject) => {
     cloudinary.v2.uploader.upload_stream({ public_id: fileName, upload_preset: uploadPreset }, (err, res) => {
@@ -60,17 +55,15 @@ const uploadImage = (id, buffer, isGif, type, url) => {
 };
 
 const moderateContent = (url, title) => {
-  if (title && title.toLowerCase().indexOf('escort') > -1) {
-    return Promise.resolve(true);
+  const exclude = ['escort', 'sex'];
+  if (title) {
+    const lower = title.toLowerCase();
+    const res = exclude.find(word => lower.indexOf(word) > -1);
+    if (res) {
+      return Promise.resolve(true);
+    }
   }
-
-  if (url.indexOf('.svg') > 0) {
-    return Promise.resolve(false);
-  }
-
-  return clarifai.models.predict(Clarifai.NSFW_MODEL, url)
-    .then(res =>
-      res.outputs[0].data.concepts.find(c => c.name === 'nsfw').value >= 0.6);
+  return Promise.resolve(false);
 };
 
 const downloadAndUpload = (id, url, type) => {
@@ -104,7 +97,7 @@ const downloadAndUpload = (id, url, type) => {
   });
 };
 
-const manipulateImage = (id, url, title, type) => {
+const manipulateImage = (id, url, title, type = 'post') => {
   if (!url) {
     console.log(`[${id}] no image, skipping image processing`);
     return Promise.resolve({});
