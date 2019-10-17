@@ -1,0 +1,11 @@
+{
+  "csswe": ["webdev", "frontend"],
+  "dbwkly": ["database", "devops"],
+  "ffocus": ["webdev", "frontend"],
+  "jswkly": ["javascript", "webdev"],
+  "ndwkly": ["nodejs", "webdev"],
+  "nodejs": ["nodejs"],
+  "nodesource": ["nodejs"],
+  "react": ["react", "webdev"],
+  "servlsst": ["serverless", "devops", "cloud"]
+}

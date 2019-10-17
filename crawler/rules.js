@@ -104,6 +104,7 @@ module.exports = () => {
       wrapUrl($ => $('meta[name="twitter:image:src"]').attr('content')),
       wrapUrl($ => $('meta[name="twitter:image"]').attr('content')),
       wrapUrl($ => $('meta[itemprop="image"]').attr('content')),
+      wrapUrl($ => $('.issue-html td > a > img').attr('src')),
     ],
     siteTwitter: [
       wrapTwitterHandle($ => $('meta[name="twitter:site"]').attr('content')),
@@ -122,6 +123,7 @@ module.exports = () => {
       wrapElementTextTags($ => $('.post .category').toArray().map(el => $(el).text())),
       wrapElementTextTags($ => $('.content-heading__secondary-categories a').toArray().map(el => $(el).text())),
       wrapElementTextTags($ => $('.post__tags a').toArray().map(el => $(el).text())),
+      wrapElementTextTags($ => $('.tag a').toArray().map(el => $(el).text())),
       // wrapKeywords($ => $('meta[name="keywords"]').attr('content')),
     ],
     readTime: [
@@ -132,6 +134,7 @@ module.exports = () => {
       wrapReadTime($ => $('article').html()),
       wrapReadTime($ => $('#readme').html()),
       wrapReadTime($ => $('.post__content').html()),
+      wrapReadTime($ => $('.issue-html').html()),
     ],
     paid: [
       wrapMediumPaywall($ => $('svg').toArray().map(el => $(el))),

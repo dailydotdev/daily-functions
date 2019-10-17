@@ -7,6 +7,9 @@ const metascraper = require('metascraper').load([
 ]);
 const PubSub = require(`@google-cloud/pubsub`);
 const pubsub = new PubSub();
+const duplicateTags = require('./duplicate_tags');
+const ignoredTags = require('./ignored_tags');
+const pubTags = require('./pub_tags');
 
 const createOrGetTopic = () => {
   const topicName = 'crawled-post';
@@ -53,47 +56,19 @@ const convertTagsToSchema = (tags) => {
 const getIfTrue = (cond, key, value) => cond ? { [key]: value } : {};
 
 const processTags = (data) => {
-  const filter = ['uncategorized', 'architecture-&-design', 'towards-data-science', 'ai,-ml-&-data-engineering', 'article', 'tc'];
-
-  const trans = {
-    'web-development': 'webdev',
-    'web-dev': 'webdev',
-    'front-end-development': 'frontend',
-    'frontend-development': 'frontend',
-    'software-development': 'development',
-    'app-development': 'development',
-    'programming': 'development',
-    'coding': 'development',
-    'developer': 'development',
-    'engineering': 'development',
-    'software-engineering': 'development',
-    'vuejs': 'vue',
-    'reactjs': 'react',
-    'technology': 'tech',
-    'artificial-intelligence': 'ai',
-    'go': 'golang',
-    'careers': 'career',
-    'cloud-computing': 'cloud',
-    'culture-&-methods': 'culture',
-    'data-scientist': 'data-science',
-    'life-lessons': 'life',
-    'mobile-app-development': 'mobile',
-    'node': 'nodejs',
-    'personal-growth': 'personal-development',
-    'self-improvement': 'personal-development',
-    'self': 'personal-development',
-    'startup': 'startups',
-  };
   if (data.tags && data.tags.length) {
     return Object.assign({}, data, {
       tags: Array.from(new Set(data.tags.map(t => {
         const newT = t.toLowerCase().trim().replace(/ /g, '-');
-        if (trans[newT]) {
-          return trans[newT];
+        if (duplicateTags[newT]) {
+          return duplicateTags[newT];
         }
         return newT;
-      }).filter(t => t.length > 0 && filter.indexOf(t) < 0))),
+      }).filter(t => t.length > 0 && ignoredTags.indexOf(t) < 0 && t.indexOf('&') < 0))),
     });
+  }
+  if (pubTags[data.publicationId]) {
+    return Object.assign({}, data, { tags: pubTags[data.publicationId] });
   }
 
   return data;
@@ -136,8 +111,8 @@ exports.crawler = (event) => {
     });
 };
 
-// extractMetaTags('https://blogs.msdn.microsoft.com/freddyk/2018/12/11/clean-up-after-yourself-docker-your-mom-isnt-here/')
+// extractMetaTags('https://serverless.email/issues/122')
 //   .then(convertTagsToSchema)
-//   .then(processTags)
+//   .then(data => processTags({...data, publicationId: 'servlsst'}))
 //   .then(console.log)
 //   .catch(console.error);
