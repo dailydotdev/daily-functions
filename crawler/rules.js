@@ -1,4 +1,6 @@
 const { getUrl, isUrl } = require('@metascraper/helpers');
+const { title: titleRules } = require('metascraper-title')();
+const { validator: wrapTitle } = require('metascraper-title');
 const readTimeEstimate = require('read-time-estimate');
 
 const validatorTime = value => {
@@ -138,6 +140,10 @@ module.exports = () => {
     ],
     paid: [
       wrapMediumPaywall($ => $('svg').toArray().map(el => $(el))),
+    ],
+    title: [
+      wrapTitle($ => $('.issue .issue-title').text()),
+      ...titleRules,
     ],
   });
 };

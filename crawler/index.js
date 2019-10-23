@@ -1,7 +1,6 @@
 const got = require('got');
 const metascraper = require('metascraper').load([
   require('metascraper-date')(),
-  require('metascraper-title')(),
   require('metascraper-url')(),
   require('./rules')(),
 ]);
@@ -82,7 +81,7 @@ exports.crawler = (event) => {
 
   return extractMetaTags(data.url)
     .then(convertTagsToSchema)
-    .then(tags => Object.assign({}, data, tags, getIfTrue(data.title, 'title', data.title), getIfTrue(data.tags && data.tags.length > 0, 'tags', data.tags)))
+    .then(tags => Object.assign({}, data, tags, getIfTrue(data.title && data.title.length < 255, 'title', data.title), getIfTrue(data.tags && data.tags.length > 0, 'tags', data.tags)))
     .catch((err) => {
       if (err.statusCode === 404) {
         console.info(`[${data.id}] post doesn't exist anymore ${data.url}`);
