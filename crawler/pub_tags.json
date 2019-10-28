@@ -7,5 +7,6 @@
   "nodejs": ["nodejs"],
   "nodesource": ["nodejs"],
   "react": ["react", "webdev"],
-  "servlsst": ["serverless", "devops", "cloud"]
+  "servlsst": ["serverless", "devops", "cloud"],
+  "web": ["webdev"]
 }
