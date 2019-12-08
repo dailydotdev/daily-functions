@@ -8,5 +8,6 @@
   "nodesource": ["nodejs"],
   "react": ["react", "webdev"],
   "servlsst": ["serverless", "devops", "cloud"],
-  "web": ["webdev"]
+  "web": ["webdev"],
+  "ember": ["ember", "webdev", "frontend", "javascript"]
 }
