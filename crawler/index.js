@@ -1,4 +1,5 @@
 const got = require('got');
+const langDetector = new (require('languagedetect'));
 const metascraper = require('metascraper').load([
   require('metascraper-date')(),
   require('metascraper-url')(),
@@ -73,6 +74,11 @@ const processTags = (data) => {
   return data;
 };
 
+function isEnglish(text) {
+  const langs = langDetector.detect(text, 10);
+  return !!langs.find(l => l[0] === 'english');
+}
+
 exports.crawler = (event) => {
   const pubsubMessage = event;
   const data = JSON.parse(Buffer.from(pubsubMessage.data, 'base64').toString());
@@ -99,6 +105,11 @@ exports.crawler = (event) => {
 
       if (item.paid) {
         console.log(`[${data.id}] paid content is ignored`, item);
+        return Promise.resolve();
+      }
+
+      if (!isEnglish(item.title)) {
+        console.log(`[${data.id}] non-english content is ignored`, item);
         return Promise.resolve();
       }
 
