@@ -34,6 +34,7 @@ const extractMetaTags = (url) =>
     .then(res => Object.assign({}, res, {
       readTime: res.readTime ? res.readTime.duration : null,
       paid: res.paid === 'true',
+      isMediumComment: res.isMediumComment === 'true',
     }));
 
 const convertTagsToSchema = (tags) => {
@@ -105,6 +106,11 @@ exports.crawler = (event) => {
 
       if (item.paid) {
         console.log(`[${data.id}] paid content is ignored`, item);
+        return Promise.resolve();
+      }
+
+      if (item.isMediumComment) {
+        console.log(`[${data.id}] medium comment is ignored`, item);
         return Promise.resolve();
       }
 

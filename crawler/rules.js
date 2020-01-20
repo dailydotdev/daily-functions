@@ -94,6 +94,14 @@ const wrapMediumPaywall = rule => ({ htmlDom }) => {
   return star.length > 0 ? 'true' : false;
 };
 
+const wrapMediumComment = rule => ({ htmlDom }) => {
+  const element = rule(htmlDom);
+  if (element) {
+    return 'true';
+  }
+  return false;
+};
+
 module.exports = () => {
   return ({
     modified: [
@@ -144,6 +152,9 @@ module.exports = () => {
     title: [
       wrapTitle($ => $('.issue .issue-title').text()),
       ...titleRules,
+    ],
+    isMediumComment: [
+      wrapMediumComment($ => $('article > section:first-child a:first-child').html()),
     ],
   });
 };
