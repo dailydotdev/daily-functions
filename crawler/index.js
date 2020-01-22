@@ -109,7 +109,7 @@ exports.crawler = (event) => {
         return Promise.resolve();
       }
 
-      if (item.isMediumComment) {
+      if (item.isMediumComment && item.url.indexOf('medium.com') >= 0) {
         console.log(`[${data.id}] medium comment is ignored`, item);
         return Promise.resolve();
       }
