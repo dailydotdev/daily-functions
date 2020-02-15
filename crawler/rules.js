@@ -94,7 +94,7 @@ const wrapMediumPaywall = rule => ({ htmlDom }) => {
   return star.length > 0 ? 'true' : false;
 };
 
-const wrapMediumComment = rule => ({ htmlDom }) => {
+const wrapElementExists = rule => ({ htmlDom }) => {
   const element = rule(htmlDom);
   if (element) {
     return 'true';
@@ -147,6 +147,7 @@ module.exports = () => {
       wrapReadTime($ => $('.issue-html').html()),
     ],
     paid: [
+      wrapElementExists($ => $('article.meteredContent').html()),
       wrapMediumPaywall($ => $('svg').toArray().map(el => $(el))),
     ],
     title: [
@@ -154,7 +155,7 @@ module.exports = () => {
       ...titleRules,
     ],
     isMediumComment: [
-      wrapMediumComment($ => $('article > section:first-child a:first-child').html()),
+      wrapElementExists($ => $('article > section:first-child a:first-child').html()),
     ],
   });
 };
