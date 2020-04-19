@@ -1,0 +1,14 @@
+{
+  "name": "daily-webflow_forms",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "deploy": "gcloud --project devkit-prod beta functions deploy webflow_forms --runtime nodejs10 --trigger-http --env-vars-file .env.yaml"
+  },
+  "engines": {
+    "node": "~10.15.0"
+  },
+  "dependencies": {
+    "@sendgrid/client": "^7.0.1"
+  }
+}
