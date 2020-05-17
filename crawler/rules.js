@@ -134,6 +134,12 @@ module.exports = () => {
       wrapElementTextTags($ => $('.content-heading__secondary-categories a').toArray().map(el => $(el).text())),
       wrapElementTextTags($ => $('.post__tags a').toArray().map(el => $(el).text())),
       wrapElementTextTags($ => $('.tag a').toArray().map(el => $(el).text())),
+      wrapElementTextTags($ => $('.entry-topic .cat-links a').toArray().map(el => $(el).text())),
+      wrapElementTextTags($ => $('.Tag span.title').toArray().map(el => $(el).text())),
+      wrapDevToTags($ => $('.post-full-meta a').toArray().map(el => $(el).text())),
+      wrapElementTextTags($ => $('.blogPost__categories .categories__categoryLink').toArray().map(el => $(el).text())),
+      wrapElementTextTags($ => $('.meta a.tag').toArray().map(el => $(el).text())),
+      wrapElementTextTags($ => $('.content a.tag').toArray().map(el => $(el).text())),
       // wrapKeywords($ => $('meta[name="keywords"]').attr('content')),
     ],
     readTime: [

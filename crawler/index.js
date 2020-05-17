@@ -28,14 +28,30 @@ const createOrGetTopic = () => {
     });
 };
 
-const extractMetaTags = (url) =>
+const specificMetaFixes = (pubId, url, meta) => {
+  switch (pubId) {
+    case 'addy':
+      // Addy Osmani blog has wrong twitter:url tag
+      return Object.assign({}, meta, { url });
+    case 'bair':
+      // BAIR has wrong image url in the meta tags
+      return Object.assign({}, meta, { image: meta.image.replace('blogassets', 'blog/assets') });
+    default:
+      return meta;
+  }
+};
+
+const formatMeta = (meta) =>
+  Object.assign({}, meta, {
+    readTime: meta.readTime ? meta.readTime.duration : null,
+    paid: meta.paid === 'true',
+    isMediumComment: meta.isMediumComment === 'true',
+  });
+
+const extractMetaTags = (pubId, url) =>
   got(url)
     .then(({ body: html, url }) => metascraper({ html, url }))
-    .then(res => Object.assign({}, res, {
-      readTime: res.readTime ? res.readTime.duration : null,
-      paid: res.paid === 'true',
-      isMediumComment: res.isMediumComment === 'true',
-    }));
+    .then(res => specificMetaFixes(pubId, url, formatMeta(res)));
 
 const convertTagsToSchema = (tags) => {
   const obj = Object.assign({}, tags);
@@ -81,12 +97,11 @@ function isEnglish(text) {
 }
 
 exports.crawler = (event) => {
-  const pubsubMessage = event;
-  const data = JSON.parse(Buffer.from(pubsubMessage.data, 'base64').toString());
+  const data = JSON.parse(Buffer.from(event.data, 'base64').toString());
 
   console.log(`[${data.id}] scraping ${data.url} to enrich`, data);
 
-  return extractMetaTags(data.url)
+  return extractMetaTags(data.publicationId, data.url)
     .then(convertTagsToSchema)
     .then(tags => Object.assign({}, data, tags, getIfTrue(data.title && data.title.length < 255, 'title', data.title), getIfTrue(data.tags && data.tags.length > 0, 'tags', data.tags)))
     .catch((err) => {
@@ -127,8 +142,9 @@ exports.crawler = (event) => {
     });
 };
 
-// extractMetaTags('https://serverless.email/issues/122')
+// const publicationId = 'dc';
+// extractMetaTags(publicationId, 'https://vuejsdevelopers.com/2020/03/16/vue-js-tutorial')
 //   .then(convertTagsToSchema)
-//   .then(data => processTags({...data, publicationId: 'servlsst'}))
+//   .then(data => processTags({ ...data, publicationId }))
 //   .then(console.log)
 //   .catch(console.error);
