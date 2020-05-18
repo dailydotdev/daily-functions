@@ -140,6 +140,7 @@ module.exports = () => {
       wrapElementTextTags($ => $('.blogPost__categories .categories__categoryLink').toArray().map(el => $(el).text())),
       wrapElementTextTags($ => $('.meta a.tag').toArray().map(el => $(el).text())),
       wrapElementTextTags($ => $('.content a.tag').toArray().map(el => $(el).text())),
+      wrapElementTextTags($ => $('.post-footer .labels a').toArray().map(el => $(el).text())),
       // wrapKeywords($ => $('meta[name="keywords"]').attr('content')),
     ],
     readTime: [

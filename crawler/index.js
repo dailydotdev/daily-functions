@@ -143,7 +143,7 @@ exports.crawler = (event) => {
 };
 
 // const publicationId = 'dc';
-// extractMetaTags(publicationId, 'https://vuejsdevelopers.com/2020/03/16/vue-js-tutorial')
+// extractMetaTags(publicationId, 'https://firebase.googleblog.com/2020/03/firebase-kotlin-ga.html')
 //   .then(convertTagsToSchema)
 //   .then(data => processTags({ ...data, publicationId }))
 //   .then(console.log)
