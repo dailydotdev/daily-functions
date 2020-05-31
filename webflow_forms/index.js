@@ -22,6 +22,9 @@ exports.webflow_forms = (req, res) => {
     case 'Newsletter':
       listId = 'f439c1ff-6027-4e09-a109-2a0ac27f7903';
       break;
+    case 'Premium':
+      listId = 'b5bfeeec-4faf-4e38-a2d8-884ce0ad2e57';
+      break;
     default:
       return res.status(400).send();
   }

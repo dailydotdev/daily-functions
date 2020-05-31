@@ -28,6 +28,7 @@
   "inter": ["c++", "linux", "embedded"],
   "jswkly": ["javascript", "webdev"],
   "k8s": ["kubernetes", "devops"],
+  "kentcdodds": ["webdev", "javascript"],
   "keycdn": ["development", "webdev"],
   "mmhaskell": ["haskell"],
   "mongomemo": ["devops", "mongo"],
