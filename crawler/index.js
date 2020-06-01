@@ -73,22 +73,21 @@ const convertTagsToSchema = (tags) => {
 const getIfTrue = (cond, key, value) => cond ? { [key]: value } : {};
 
 const processTags = (data) => {
+  let tags = data.tags || [];
   if (data.tags && data.tags.length) {
-    return Object.assign({}, data, {
-      tags: Array.from(new Set(data.tags.map(t => {
-        const newT = t.toLowerCase().trim().replace(/ /g, '-');
-        if (duplicateTags[newT]) {
-          return duplicateTags[newT];
-        }
-        return newT;
-      }).filter(t => t.length > 0 && ignoredTags.indexOf(t) < 0 && t.indexOf('&') < 0))),
-    });
+    tags = data.tags.map(t => {
+      const newT = t.toLowerCase().trim().replace(/ /g, '-');
+      if (duplicateTags[newT]) {
+        return duplicateTags[newT];
+      }
+      return newT;
+    }).filter(t => t.length > 0 && ignoredTags.indexOf(t) < 0 && t.indexOf('&') < 0);
   }
   if (pubTags[data.publicationId]) {
-    return Object.assign({}, data, { tags: pubTags[data.publicationId] });
+    tags = tags.concat(pubTags[data.publicationId]);
   }
-
-  return data;
+  tags = Array.from(new Set(tags));
+  return Object.assign({}, data, { tags });
 };
 
 function isEnglish(text) {
