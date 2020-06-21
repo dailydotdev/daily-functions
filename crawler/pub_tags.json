@@ -9,6 +9,7 @@
   "aweios": ["apple", "ios"],
   "awelix": ["elixir"],
   "bair": ["machine-learning", "ai", "deep-learning"],
+  "bitbar": ["testing", "development"],
   "cleancoder": ["development"],
   "clper": ["azure", "sql-server", "microsoft"],
   "codepen": ["showdev", "frontend", "webdev"],
@@ -41,6 +42,7 @@
   "nodejs": ["nodejs"],
   "nodesource": ["nodejs"],
   "ns": ["nativescript", "webdev"],
+  "oai": ["ai", "data-science"],
   "objc": ["swift", "apple"],
   "oss": ["open-source"],
   "overreacted": ["webdev", "development"],
@@ -66,5 +68,8 @@
   "unreal": ["gaming"],
   "v8": ["javascript", "webdev"],
   "web": ["webdev"],
-  "ember": ["ember", "webdev", "frontend", "javascript"]
+  "ember": ["ember", "webdev", "frontend", "javascript"],
+  "17ba5ebf5aae4296b4c2c4d5bf3c2778": ["design"],
+  "34bbbd06dc2d4cb48fbaa0812fc4ed18": ["design"],
+  "40f4a18f3bb54009a7337acc75b6fb1a": ["news"]
 }

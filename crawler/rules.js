@@ -141,6 +141,8 @@ module.exports = () => {
       wrapElementTextTags($ => $('.meta a.tag').toArray().map(el => $(el).text())),
       wrapElementTextTags($ => $('.content a.tag').toArray().map(el => $(el).text())),
       wrapElementTextTags($ => $('.post-footer .labels a').toArray().map(el => $(el).text())),
+      wrapElementTextTags($ => $('.c-entry-group-labels__item a').toArray().map(el => $(el).text())),
+      wrapElementTextTags($ => $('article .topics span.topic').toArray().map(el => $(el).text())),
       // wrapKeywords($ => $('meta[name="keywords"]').attr('content')),
     ],
     readTime: [
