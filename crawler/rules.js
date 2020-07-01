@@ -39,13 +39,13 @@ const validatorKeywords = value => {
 
 const wrapDevToTags = rule => ({ htmlDom }) => {
   const values = rule(htmlDom).map(t => t.replace('#', ''));
-  if (!values.length) return false;
+  if (!values || !values.length) return false;
   return validatorTags(values);
 };
 
 const wrapElementTextTags = rule => ({ htmlDom }) => {
   const values = rule(htmlDom);
-  if (!values.length) return false;
+  if (!values || !values.length) return false;
   return validatorTags(values);
 };
 
@@ -143,6 +143,7 @@ module.exports = () => {
       wrapElementTextTags($ => $('.post-footer .labels a').toArray().map(el => $(el).text())),
       wrapElementTextTags($ => $('.c-entry-group-labels__item a').toArray().map(el => $(el).text())),
       wrapElementTextTags($ => $('article .topics span.topic').toArray().map(el => $(el).text())),
+      wrapElementTextTags($ => $('.tags .daily-tags').toArray().map(el => $(el).text().split(','))[0]),
       // wrapKeywords($ => $('meta[name="keywords"]').attr('content')),
     ],
     readTime: [
@@ -154,6 +155,7 @@ module.exports = () => {
       wrapReadTime($ => $('#readme').html()),
       wrapReadTime($ => $('.post__content').html()),
       wrapReadTime($ => $('.issue-html').html()),
+      wrapReadTime($ => $('.rich-blog-post').html()),
     ],
     paid: [
       wrapElementExists($ => $('article.meteredContent').html()),
