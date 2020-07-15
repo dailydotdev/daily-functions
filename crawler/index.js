@@ -97,6 +97,8 @@ function isEnglish(text) {
 
 exports.crawler = (event) => {
   const data = JSON.parse(Buffer.from(event.data, 'base64').toString());
+  // Get rid of source=rss* added by Medium
+  data.url = data.url.replace(/\?source=rss(.*)/, '');
 
   console.log(`[${data.id}] scraping ${data.url} to enrich`, data);
 
