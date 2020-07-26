@@ -21,6 +21,7 @@
   "distill": ["machine-learning", "ai"],
   "ds_central": ["data-science"],
   "elastic": ["devops", "elastic"],
+  "electron": ["nodejs", "electron"],
   "evrdyrails": ["ruby", "rails"],
   "ffocus": ["webdev", "frontend"],
   "frontwkly": ["webdev", "frontend"],
@@ -30,12 +31,14 @@
   "hackernoon": ["development"],
   "hc": ["devops"],
   "inter": ["c++", "linux", "embedded"],
+  "javaworld": ["java"],
   "jswkly": ["javascript", "webdev"],
   "k8s": ["kubernetes", "devops"],
   "kentcdodds": ["webdev", "javascript"],
   "keycdn": ["development", "webdev"],
   "kotlinwkly": ["kotlin"],
   "learnk8s": ["kubernetes", "devops"],
+  "mafo": ["development"],
   "mmhaskell": ["haskell"],
   "mongomemo": ["devops", "mongo"],
   "ndwkly": ["nodejs", "webdev"],
@@ -74,5 +77,9 @@
   "40f4a18f3bb54009a7337acc75b6fb1a": ["news"],
   "b0e984941a15462db88d582f1442bf84": ["devops", "development"],
   "153719a0a4b146dca15f76b23a6fcce0": ["webdev", "wordpress", "development"],
-  "13be5f7eb4ae48be9c6ec5634b51c601": ["design"]
+  "13be5f7eb4ae48be9c6ec5634b51c601": ["design"],
+  "08f78e0766694c9386033e45b6736dcb": ["vc", "entrepreneurship"],
+  "6e6b4103c8d747bbb4cac4c609af00b7": ["webdev", "jamstack"],
+  "ed85f74c369a46dea617bca10ee00e57": ["webdev", "ruby"],
+  "d090fdeb381f4aaea3cc97a0964afc5f": ["vc", "entrepreneurship"]
 }
