@@ -20,7 +20,7 @@ exports.webflow_forms = (req, res) => {
   let listId;
   switch (body.name) {
     case 'Newsletter':
-      listId = 'f439c1ff-6027-4e09-a109-2a0ac27f7903';
+      listId = '13d39d0b-927c-4cad-8cbc-f2eaa8af4147';
       break;
     case 'Premium':
       listId = 'b5bfeeec-4faf-4e38-a2d8-884ce0ad2e57';
