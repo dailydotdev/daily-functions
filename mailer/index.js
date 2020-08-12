@@ -37,7 +37,7 @@ const send = (templateId, email, name, url) => sgMail.send({
 exports.mailer = (event) => {
   const data = JSON.parse(Buffer.from(event.data, 'base64').toString());
   const req = data.pubRequest;
-  if (req.userEmail) {
+  if (req && req.userEmail) {
     let templateId;
     if (data.type === 'approve') {
       templateId = reason2Template['approve'];
