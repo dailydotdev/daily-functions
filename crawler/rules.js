@@ -30,7 +30,7 @@ const wrapTwitterHandle = rule => ({ htmlDom }) => {
   return validatorTwitterHandle(value);
 };
 
-const validatorTags = values => values.map(v => v.toLowerCase().trim().replace(/ /g, '-'));
+const validatorTags = values => values.map(v => v.toLowerCase().trim());
 
 const validatorKeywords = value => {
   if (!value || value.indexOf(',') < 0) return false;
@@ -144,6 +144,7 @@ module.exports = () => {
       wrapElementTextTags($ => $('.c-entry-group-labels__item a').toArray().map(el => $(el).text())),
       wrapElementTextTags($ => $('article .topics span.topic').toArray().map(el => $(el).text())),
       wrapElementTextTags($ => $('.tags .daily-tags').toArray().map(el => $(el).text().split(','))[0]),
+      wrapElementTextTags($ => $('.cat-links a[rel="category tag"]').toArray().map(el => $(el).text())),
       // wrapKeywords($ => $('meta[name="keywords"]').attr('content')),
     ],
     readTime: [

@@ -76,12 +76,12 @@ const processTags = (data) => {
   let tags = data.tags || [];
   if (data.tags && data.tags.length) {
     tags = data.tags.map(t => {
-      const newT = t.toLowerCase().trim().replace(/ /g, '-');
+      const newT = t.toLowerCase().split('&')[0].trim().replace(/ /g, '-');
       if (duplicateTags[newT]) {
         return duplicateTags[newT];
       }
       return newT;
-    }).filter(t => t.length > 0 && ignoredTags.indexOf(t) < 0 && t.indexOf('&') < 0);
+    }).filter(t => t.length > 0 && ignoredTags.indexOf(t) < 0);
   }
   if (pubTags[data.publicationId]) {
     tags = tags.concat(pubTags[data.publicationId]);
