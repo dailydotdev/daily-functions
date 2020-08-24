@@ -169,5 +169,8 @@ module.exports = () => {
     isMediumComment: [
       wrapElementExists($ => $('article > section:first-child a:first-child').html()),
     ],
+    canonicalUrl: [
+      wrapUrl($ => $('link[rel="canonical"]').attr('href')),
+    ],
   });
 };
