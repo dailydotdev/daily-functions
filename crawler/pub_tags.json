@@ -30,6 +30,7 @@
   "gqledit": ["webdev"],
   "hackernoon": ["development"],
   "hc": ["devops"],
+  "increment": ["webdev"],
   "inter": ["c++", "linux", "embedded"],
   "javaworld": ["java"],
   "jswkly": ["javascript", "webdev"],
@@ -87,5 +88,8 @@
   "aae9820a1a3b4d4dac05f3c773b5f664": ["vc", "entrepreneurship"],
   "0622053dd77e4f83a2ee573b9a22bbea": ["design"],
   "3849974cc92a47da94fadac234b53f07": ["development"],
-  "f4ecfc3c2b3c48e8815e76405d860001": ["news"]
+  "f4ecfc3c2b3c48e8815e76405d860001": ["news"],
+  "827cd5eaaad94ff6a86239f8e71becd5": ["webdev", "javascript"],
+  "92de1dd366984c3eb1a3c8563f73f0e1": ["javascript"],
+  "a985140b369044a3819959087e3b4416": ["webdev", "frontend", "design"]
 }
