@@ -135,6 +135,11 @@ exports.crawler = (event) => {
         return Promise.resolve();
       }
 
+      if (item.tags && item.tags.indexOf('sponsored') > -1) {
+        console.log(`[${data.id}] sponsored content is ignored`, item);
+        return Promise.resolve();
+      }
+
       return createOrGetTopic()
         .then((topic) => {
           console.log(`[${data.id}] crawled post`, item);
