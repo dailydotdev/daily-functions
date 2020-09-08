@@ -2,6 +2,7 @@
   "addy": ["webdev"],
   "andwkly": ["android"],
   "appledev": ["apple"],
+  "apollo": ["webdev", "backend", "graphql"],
   "ardlbs": ["golang"],
   "aurelia": ["webdev", "frontend"],
   "auth0": ["development"],
@@ -68,6 +69,7 @@
   "snipcart": ["development"],
   "svelte": ["svelte", "webdev"],
   "symfony": ["symfony", "php"],
+  "tripleb": ["development"],
   "tss": ["devops", "java"],
   "twirust": ["rust"],
   "unreal": ["gaming"],
@@ -92,5 +94,9 @@
   "f4ecfc3c2b3c48e8815e76405d860001": ["news"],
   "827cd5eaaad94ff6a86239f8e71becd5": ["webdev", "javascript"],
   "92de1dd366984c3eb1a3c8563f73f0e1": ["javascript"],
-  "a985140b369044a3819959087e3b4416": ["webdev", "frontend", "design"]
+  "a985140b369044a3819959087e3b4416": ["webdev", "frontend", "design"],
+  "9d6de00f378642489a8bc73ad3101e06": ["webdev"],
+  "a95ed97f1a554679bd2c73414559bb1b": ["news"],
+  "d3532e9ea8694137af3c71029d1f1813": ["webdev"],
+  "f467ae1b21794a679b5b6d8aaa7254fe": ["vc", "entrepreneurship"]
 }
