@@ -2,6 +2,7 @@
   "addy": ["webdev"],
   "andwkly": ["android"],
   "appledev": ["apple"],
+  "appsignal": ["development"],
   "apollo": ["webdev", "backend", "graphql"],
   "ardlbs": ["golang"],
   "aurelia": ["webdev", "frontend"],
