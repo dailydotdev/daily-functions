@@ -70,6 +70,7 @@
   "snipcart": ["development"],
   "svelte": ["svelte", "webdev"],
   "symfony": ["symfony", "php"],
+  "tidyv": ["data-science"],
   "tripleb": ["development"],
   "tss": ["devops", "java"],
   "twirust": ["rust"],
