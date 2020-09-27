@@ -4,22 +4,27 @@ const pubsub = new PubSub();
 const topic = pubsub.topic('crawled-post');
 // const topic = pubsub.topic('ad-image-processed');
 
-const link = 'https://daily.dev/premium';
-const description = 'Daily Premium is officially upcoming! Get your 50% pre-launch discount 🎉';
-const source = 'Daily';
-const image = 'https://storage.googleapis.com/devkit-assets/ads/Daily%20Premium.jpg';
-const start = new Date('8/10/19Z');
+const num = '3';
+const link = `https://store.daily.dev/`;
+const description = 'Busy developer? Make sure others know it. Shop now on the swag store 🦸‍';
+const company = 'daily.dev';
+const source = `Swag`;
+const image = 'https://storage.googleapis.com/devkit-assets/ads/Placeholder%20-%20Swag%20Store.jpg';
+const start = new Date('08/12/20Z');
 // const end = new Date(start.getTime() + 7 * 24 * 60 * 60 * 1000);
-const end = new Date('8/10/20Z');
+const end = new Date('08/12/25Z');
 
 const data = {
-  id: crypto.createHash('md5').update(link).digest('hex'),
+  id: `${source}${num}`,
   link,
   description,
-  source,
+  company,
+  source: `Daily ${source}`,
   image,
   start,
   end,
+  geo: null,
+  fallback: true,
   type: 'ad',
 };
 topic.publisher().publish(Buffer.from(JSON.stringify(data)));

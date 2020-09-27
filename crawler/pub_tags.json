@@ -27,6 +27,7 @@
   "electron": ["nodejs", "electron"],
   "evrdyrails": ["ruby", "rails"],
   "ffocus": ["webdev", "frontend"],
+  "freecodecamp": ["webdev", "development"],
   "frontwkly": ["webdev", "frontend"],
   "gatsby": ["gatsby", "react", "frontend", "webdev"],
   "glw": ["golang"],
@@ -100,5 +101,6 @@
   "9d6de00f378642489a8bc73ad3101e06": ["webdev"],
   "a95ed97f1a554679bd2c73414559bb1b": ["news"],
   "d3532e9ea8694137af3c71029d1f1813": ["webdev"],
-  "f467ae1b21794a679b5b6d8aaa7254fe": ["vc", "entrepreneurship"]
+  "f467ae1b21794a679b5b6d8aaa7254fe": ["vc", "entrepreneurship"],
+  "80b54d32e500499aa20ac00c0f27fdc7": ["devops", "aws", "cloud"]
 }
