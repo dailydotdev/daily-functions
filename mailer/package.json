@@ -9,6 +9,7 @@
     "node": "~8.11.0"
   },
   "dependencies": {
-    "@sendgrid/mail": "^6.4.0"
+    "@sendgrid/mail": "^6.4.0",
+    "date-fns": "^2.16.1"
   }
 }

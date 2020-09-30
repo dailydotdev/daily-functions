@@ -1,36 +1,37 @@
 const sgMail = require('@sendgrid/mail');
+const format = require('date-fns/format');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-const reason2Template = {
-  approve: 'd-70b3a7c0788e48aeadeb84c2ac2b773a',
-  exists: 'd-4204a2382a71452ea00488ad2be8900c',
-  'non-english': 'd-d922f65dc4b743f3964a5ba397410ea2',
-  'not-active': 'd-f1121c6d83db4de8931dbae0ba1f56d2',
-  personal: 'd-aef9d39eb7814192aac705fc61609dc1',
-  rss: 'd-db9bd8465aa54ee7b5454204a39b10a8',
-  promotion: 'd-c31a38be9a3849d2b8667b6c5f447290',
-  'not-blog': 'd-aa42d9bb7fe346d192b2da64d40398c7',
-  'not-relevant': 'd-bf84f046d2714622ba55e5849300a06e',
+const type2Template = {
+  approve: 'd-d79367f86f1e4ca5afdf4c1d39ff7214',
+  decline: ' d-48de63612ff944cb8156fec17f47f066',
+  new: 'd-9254665878014627b4fd71593f09d975',
 };
 
-const send = (templateId, email, name, url) => sgMail.send({
+const send = (templateId, email, userName, rssLink, sourceName, createdAt) => sgMail.send({
   to: email,
   from: {
-    email: 'ido@dailynow.co',
-    name: 'Ido From Daily',
+    email: 'informer@daily.dev',
+    name: 'daily.dev',
   },
-  reply_to: {
-    email: 'ido@dailynow.co',
-    name: 'Ido From Daily',
+  replyTo: {
+    email: 'hi@daily.dev',
+    name: 'daily.dev',
   },
+  trackingSettings: {
+    openTracking: { enable: true },
+  },
+  asm: {
+    groupId: 15003,
+  },
+  category: 'Source Request',
   template_id: templateId,
   dynamic_template_data: {
-    name,
-    url,
-  },
-  tracking_settings: {
-    open_tracking: { enable: true },
+    source_name: sourceName,
+    rss_link: rssLink,
+    first_name: userName,
+    timestamp: format(createdAt, 'EEEE, d LLLL y, HH:mm'),
   },
 });
 
@@ -38,14 +39,12 @@ exports.mailer = (event) => {
   const data = JSON.parse(Buffer.from(event.data, 'base64').toString());
   const req = data.pubRequest;
   if (req && req.userEmail) {
-    let templateId;
-    if (data.type === 'approve') {
-      templateId = reason2Template['approve'];
-    } else if (data.type === 'decline') {
-      templateId = reason2Template[req.reason];
+    let templateId = type2Template[data.type];
+    if (data.type === 'declined' && data.reason === 'exists') {
+      templateId = type2Template['approve'];
     }
     if (templateId) {
-      return send(templateId, req.userEmail, req.userName, req.url);
+      return send(templateId, req.userEmail, req.userName, req.url, req.pubName, new Date(req.createdAt));
     }
   }
   return Promise.resolve();
