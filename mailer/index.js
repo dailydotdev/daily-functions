@@ -5,7 +5,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const type2Template = {
   approve: 'd-d79367f86f1e4ca5afdf4c1d39ff7214',
-  decline: ' d-48de63612ff944cb8156fec17f47f066',
+  decline: 'd-48de63612ff944cb8156fec17f47f066',
   new: 'd-9254665878014627b4fd71593f09d975',
 };
 
@@ -44,7 +44,13 @@ exports.mailer = (event) => {
       templateId = type2Template['approve'];
     }
     if (templateId) {
-      return send(templateId, req.userEmail, req.userName, req.url, req.pubName, new Date(req.createdAt));
+      return send(templateId, req.userEmail, req.userName, req.url, req.pubName, new Date(req.createdAt))
+        .catch((err) => {
+          if (err.response && err.response.body && err.response.body.errors) {
+            console.error(err.response.body.errors);
+          }
+          throw err;
+        });
     }
   }
   return Promise.resolve();
