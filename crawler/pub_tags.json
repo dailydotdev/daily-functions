@@ -74,6 +74,7 @@
   "symfony": ["symfony", "php"],
   "tidyv": ["data-science"],
   "tripleb": ["development"],
+  "thn": ["security"],
   "tss": ["devops", "java"],
   "twirust": ["rust"],
   "unreal": ["gaming"],
