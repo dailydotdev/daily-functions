@@ -28,5 +28,6 @@
   "self-improvement": "personal-development",
   "self": "personal-development",
   "startup": "startups",
-  "general-programming": "development"
+  "general-programming": "development",
+  ".net": "dotnet"
 }

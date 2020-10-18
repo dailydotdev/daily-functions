@@ -33,11 +33,13 @@
   "gatsby": ["gatsby", "react", "frontend", "webdev"],
   "glw": ["golang"],
   "gqledit": ["webdev"],
+  "golang": ["golang"],
   "hackernoon": ["development"],
   "hc": ["devops"],
   "increment": ["webdev"],
   "inter": ["c++", "linux", "embedded"],
   "javaworld": ["java"],
+  "jest": ["webdev", "javascript", "testing"],
   "jswkly": ["javascript", "webdev"],
   "k8s": ["kubernetes", "devops"],
   "kentcdodds": ["webdev", "javascript"],
@@ -79,6 +81,7 @@
   "twirust": ["rust"],
   "unreal": ["gaming"],
   "v8": ["javascript", "webdev"],
+  "vsmdev": ["microsoft", "dotnet"],
   "web": ["webdev"],
   "ember": ["ember", "webdev", "frontend", "javascript"],
   "17ba5ebf5aae4296b4c2c4d5bf3c2778": ["design"],
@@ -104,5 +107,7 @@
   "a95ed97f1a554679bd2c73414559bb1b": ["news"],
   "d3532e9ea8694137af3c71029d1f1813": ["webdev"],
   "f467ae1b21794a679b5b6d8aaa7254fe": ["vc", "entrepreneurship"],
-  "80b54d32e500499aa20ac00c0f27fdc7": ["devops", "aws", "cloud"]
+  "80b54d32e500499aa20ac00c0f27fdc7": ["devops", "aws", "cloud"],
+  "598545f3f7e2414290b1517a20cfe2e5": ["news"],
+  "62b9c60b981c4402abff164de38a2b74": ["news"]
 }
