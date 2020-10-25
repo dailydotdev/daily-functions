@@ -55,6 +55,7 @@
   "ns": ["nativescript", "webdev"],
   "oai": ["ai", "data-science"],
   "objc": ["swift", "apple"],
+  "okta": ["development"],
   "oss": ["open-source"],
   "overreacted": ["webdev", "development"],
   "pgdash": ["devops", "postgres"],
@@ -109,5 +110,10 @@
   "f467ae1b21794a679b5b6d8aaa7254fe": ["vc", "entrepreneurship"],
   "80b54d32e500499aa20ac00c0f27fdc7": ["devops", "aws", "cloud"],
   "598545f3f7e2414290b1517a20cfe2e5": ["news"],
-  "62b9c60b981c4402abff164de38a2b74": ["news"]
+  "62b9c60b981c4402abff164de38a2b74": ["news"],
+  "011de8937473448394e0288107726bc8": ["science"],
+  "16ad44f2c21f499ea2c907872e420e5c": ["science"],
+  "3875bda3f9d54186938a9a37a4ef9667": ["science"],
+  "9d4f3c387b5243a9b54c93fd9723e63d": ["science"],
+  "dfb3c52e6ef64b96a67a040c1074d1c1": ["javascript"]
 }
