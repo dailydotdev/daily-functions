@@ -31,9 +31,11 @@
   "freecodecamp": ["webdev", "development"],
   "frontwkly": ["webdev", "frontend"],
   "gatsby": ["gatsby", "react", "frontend", "webdev"],
+  "glitch": ["development"],
   "glw": ["golang"],
   "gqledit": ["webdev"],
   "golang": ["golang"],
+  "guild": ["graphql"],
   "hackernoon": ["development"],
   "hc": ["devops"],
   "increment": ["webdev"],
@@ -115,5 +117,8 @@
   "16ad44f2c21f499ea2c907872e420e5c": ["science"],
   "3875bda3f9d54186938a9a37a4ef9667": ["science"],
   "9d4f3c387b5243a9b54c93fd9723e63d": ["science"],
-  "dfb3c52e6ef64b96a67a040c1074d1c1": ["javascript"]
+  "dfb3c52e6ef64b96a67a040c1074d1c1": ["javascript"],
+  "68d6a3239391457d9f310becf5fe49b1": ["javascript"],
+  "9c723e49339f40f08cec8a7d70c4165a": ["science"],
+  "ded4cfa6c7214b9f9f46526246a983b5": ["vc", "entrepreneurship"]
 }
