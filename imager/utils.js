@@ -4,27 +4,27 @@ const pubsub = new PubSub();
 const topic = pubsub.topic('crawled-post');
 // const topic = pubsub.topic('ad-image-processed');
 
-const num = '3';
-const link = `https://store.daily.dev/`;
-const description = 'Busy developer? Make sure others know it. Shop now on the swag store 🦸‍';
-const company = 'daily.dev';
-const source = `Swag`;
-const image = 'https://storage.googleapis.com/devkit-assets/ads/Placeholder%20-%20Swag%20Store.jpg';
-const start = new Date('08/12/20Z');
+const num = '4';
+const link = `https://ter.li/ahw31z`;
+const description = 'Application performance monitoring built for devs, by devs. Get back to coding faster.';
+const company = 'Scout APM';
+const source = `Scout`;
+const image = 'https://storage.googleapis.com/devkit-assets/ads/dailydev_1024x512.png';
+const start = new Date('11/08/20Z');
 // const end = new Date(start.getTime() + 7 * 24 * 60 * 60 * 1000);
-const end = new Date('08/12/25Z');
+const end = new Date('11/22/20Z');
 
 const data = {
   id: `${source}${num}`,
   link,
   description,
   company,
-  source: `Daily ${source}`,
+  source,
   image,
   start,
   end,
   geo: null,
-  fallback: true,
+  fallback: false,
   type: 'ad',
 };
 topic.publisher().publish(Buffer.from(JSON.stringify(data)));

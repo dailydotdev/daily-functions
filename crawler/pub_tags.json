@@ -71,6 +71,7 @@
   "riot": ["gaming"],
   "rpython": ["python"],
   "rust": ["rust"],
+  "rustlib": ["rust"],
   "scotch": ["development", "webdev"],
   "servlsst": ["serverless", "devops", "cloud"],
   "shopify": ["development"],
@@ -120,5 +121,7 @@
   "dfb3c52e6ef64b96a67a040c1074d1c1": ["javascript"],
   "68d6a3239391457d9f310becf5fe49b1": ["javascript"],
   "9c723e49339f40f08cec8a7d70c4165a": ["science"],
-  "ded4cfa6c7214b9f9f46526246a983b5": ["vc", "entrepreneurship"]
+  "ded4cfa6c7214b9f9f46526246a983b5": ["vc", "entrepreneurship"],
+  "19c2d680c2e04d08a7ee4f2d9a876e03": ["golang"],
+  "f5dbfb6c185043bcb280d3b8f1835d32": ["development"]
 }
