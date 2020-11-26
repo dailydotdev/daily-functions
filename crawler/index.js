@@ -130,10 +130,10 @@ exports.crawler = (event) => {
         return Promise.resolve();
       }
 
-      if (!isEnglish(item.title)) {
-        console.log(`[${data.id}] non-english content is ignored`, item);
-        return Promise.resolve();
-      }
+      // if (!isEnglish(item.title)) {
+      //   console.log(`[${data.id}] non-english content is ignored`, item);
+      //   return Promise.resolve();
+      // }
 
       if (item.tags && item.tags.indexOf('sponsored') > -1) {
         console.log(`[${data.id}] sponsored content is ignored`, item);
