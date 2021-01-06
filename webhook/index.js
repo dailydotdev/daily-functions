@@ -1,25 +1,14 @@
 const crypto = require('crypto');
 const { PubSub } = require(`@google-cloud/pubsub`);
 const pubsub = new PubSub();
+const topic = pubsub.topic('post-fetched', {
+  batching: {
+    maxMessages: 10,
+    maxMilliseconds: 1000,
+  },
+});
 
 const convertTime = (epoch) => (epoch ? new Date(epoch * 1000) : null);
-
-const createOrGetTopic = () => {
-  const topicName = 'post-fetched';
-  return pubsub.createTopic(topicName)
-    .then((results) => {
-      const topic = results[0];
-      console.log(`topic ${topic.name} created`);
-      return topic;
-    })
-    .catch((err) => {
-      if (err.code === 6) {
-        return pubsub.topic(topicName);
-      } else {
-        console.error('failed to create topic', err);
-      }
-    });
-};
 
 exports.webhook = (req, res) => {
   const pubId = req.url.substring(1);
@@ -56,15 +45,8 @@ exports.webhook = (req, res) => {
 
   const items = body.items || [];
   if (items) {
-    return createOrGetTopic()
-      .then((topic) => {
-        const publisher = topic.publisher({
-          batching: {
-            maxMessages: 10,
-            maxMilliseconds: 1000,
-          },
-        });
-
+    return Promise.resolve()
+      .then(() => {
         return Promise.all(items.map((item) => ({
           id: crypto.createHash('md5').update(item.id).digest('hex'),
           title: item.title,
@@ -75,7 +57,7 @@ exports.webhook = (req, res) => {
           url: item.permalinkUrl,
         })).map((item) => {
           console.log(`[${item.id}] post fetched`, item);
-          return publisher.publish(Buffer.from(JSON.stringify(item)));
+          return topic.publish(Buffer.from(JSON.stringify(item)));
         }));
       })
       .then(() => res.status(200).send('OK'));

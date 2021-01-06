@@ -10,23 +10,7 @@ const pubsub = new PubSub();
 const duplicateTags = require('./duplicate_tags');
 const ignoredTags = require('./ignored_tags');
 const pubTags = require('./pub_tags');
-
-const createOrGetTopic = () => {
-  const topicName = 'crawled-post';
-  return pubsub.createTopic(topicName)
-    .then((results) => {
-      const topic = results[0];
-      console.log(`topic ${topic.name} created`);
-      return topic;
-    })
-    .catch((err) => {
-      if (err.code === 6) {
-        return pubsub.topic(topicName);
-      } else {
-        console.error('failed to create topic', err);
-      }
-    });
-};
+const topic = pubsub.topic('crawled-post');
 
 const specificMetaFixes = (pubId, url, meta) => {
   switch (pubId) {
@@ -140,11 +124,8 @@ exports.crawler = (event) => {
         return Promise.resolve();
       }
 
-      return createOrGetTopic()
-        .then((topic) => {
-          console.log(`[${data.id}] crawled post`, item);
-          return topic.publisher().publish(Buffer.from(JSON.stringify(item)));
-        });
+      console.log(`[${data.id}] crawled post`, item);
+      return topic.publish(Buffer.from(JSON.stringify(item)));
     });
 };
 

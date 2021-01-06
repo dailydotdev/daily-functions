@@ -136,7 +136,7 @@ exports.imager = (event) => {
         return createOrGetTopic(type)
           .then((topic) => {
             console.log(`[${data.id}] ${type} image processed`, item);
-            return topic.publisher().publish(Buffer.from(JSON.stringify(item)));
+            return topic.publish(Buffer.from(JSON.stringify(item)));
           });
       } else {
         console.warn(`[${data.id}] image rejected`);
