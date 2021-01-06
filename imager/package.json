@@ -3,7 +3,7 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "deploy": "gcloud --project devkit-prod beta functions deploy imager --runtime nodejs10 --trigger-resource crawled-post --trigger-event google.pubsub.topic.publish --env-vars-file .env.yaml --timeout 120"
+    "deploy": "gcloud --project devkit-prod beta functions deploy imager --runtime nodejs10 --trigger-resource post-keywords-extracted --trigger-event google.pubsub.topic.publish --env-vars-file .env.yaml --timeout 120"
   },
   "engines": {
     "node": "~10.15.0"
