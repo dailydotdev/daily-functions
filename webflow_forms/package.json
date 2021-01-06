@@ -9,6 +9,6 @@
     "node": "~10.15.0"
   },
   "dependencies": {
-    "@sendgrid/client": "^7.0.1"
+    "@sendgrid/client": "^7.4.0"
   }
 }

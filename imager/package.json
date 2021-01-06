@@ -9,7 +9,7 @@
     "node": "~10.15.0"
   },
   "dependencies": {
-    "@google-cloud/pubsub": "^0.19.1",
+    "@google-cloud/pubsub": "^2.7.0",
     "@google-cloud/vision": "^0.25.0",
     "cloudinary": "^1.14.0",
     "p-retry": "^3.0.1",

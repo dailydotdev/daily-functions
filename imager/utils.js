@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const PubSub = require(`@google-cloud/pubsub`);
+const { PubSub } = require(`@google-cloud/pubsub`);
 const pubsub = new PubSub();
 const topic = pubsub.topic('post-keywords-extracted');
 // const topic = pubsub.topic('ad-image-processed');

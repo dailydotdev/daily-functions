@@ -9,7 +9,7 @@
     "node": "~10.15.0"
   },
   "dependencies": {
-    "@google-cloud/pubsub": "^0.19.1",
+    "@google-cloud/pubsub": "^2.7.0",
     "got": "^9.6.0",
     "languagedetect": "^2.0.0",
     "metascraper": "^3.12.1",

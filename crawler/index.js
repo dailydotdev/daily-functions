@@ -5,7 +5,7 @@ const metascraper = require('metascraper').load([
   require('metascraper-url')(),
   require('./rules')(),
 ]);
-const PubSub = require(`@google-cloud/pubsub`);
+const { PubSub } = require(`@google-cloud/pubsub`);
 const pubsub = new PubSub();
 const duplicateTags = require('./duplicate_tags');
 const ignoredTags = require('./ignored_tags');

@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const request = require('request-promise-native');
 const sharp = require('sharp');
-const PubSub = require(`@google-cloud/pubsub`);
+const { PubSub } = require(`@google-cloud/pubsub`);
 const cloudinary = require('cloudinary');
 const pRetry = require('p-retry');
 

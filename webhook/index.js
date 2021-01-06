@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const PubSub = require(`@google-cloud/pubsub`);
+const { PubSub } = require(`@google-cloud/pubsub`);
 const pubsub = new PubSub();
 
 const convertTime = (epoch) => (epoch ? new Date(epoch * 1000) : null);
