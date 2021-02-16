@@ -23,7 +23,7 @@ const send = (templateId, email, userName, rssLink, sourceName, createdAt) => sg
     openTracking: { enable: true },
   },
   asm: {
-    groupId: 15003,
+    groupId: 12850,
   },
   category: 'Source Request',
   template_id: templateId,
