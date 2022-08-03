@@ -12,7 +12,7 @@
     "@google-cloud/pubsub": "^2.7.0",
     "got": "^9.6.0",
     "languagedetect": "^2.0.0",
-    "metascraper": "^3.12.1",
+    "metascraper": "^5.2.0",
     "metascraper-date": "^3.11.4",
     "metascraper-title": "^3.12.1",
     "metascraper-url": "^3.12.1",
