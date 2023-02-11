@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@google-cloud/pubsub": "^2.7.0",
-    "got": "^9.6.0",
+    "got": "^12.5.3",
     "languagedetect": "^2.0.0",
     "metascraper": "^3.12.1",
     "metascraper-date": "^3.11.4",
